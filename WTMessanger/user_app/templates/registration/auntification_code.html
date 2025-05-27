@@ -6,7 +6,6 @@
 {% block links %}
     <link rel="stylesheet" href="{% static 'css/code.css' %}">
     <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
-    <script defer src="{% static 'js/registration/code_input.js' %}"></script>
 {% endblock %}
 
 {% block content %} 
@@ -41,4 +40,8 @@
             <a href="{% url 'register' %}" class="back-link">Назад</a>
         </form>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/registration/code_input.js' %}"></script>
 {% endblock %}

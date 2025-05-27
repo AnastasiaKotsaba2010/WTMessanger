@@ -1,4 +1,4 @@
-from django.forms import forms
+from django import forms
 from .models import WTUser_Post
 
 class WTUserPostForm(forms.ModelForm):
