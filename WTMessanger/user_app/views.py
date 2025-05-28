@@ -13,6 +13,7 @@ import random, string
 
 
 class RegistrationView(FormView):
+    
     template_name = 'registration/registration.html'
     form_class = RegistrationForm
     success_url = reverse_lazy('register-verify')
