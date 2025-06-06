@@ -1,0 +1,151 @@
+body {
+    background-color: rgba(233, 229, 238, 1);
+}
+
+.center-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 4.5rem);
+    padding: 1rem;
+}
+
+
+.form-login {
+    width: 100%;
+    /* max-width: auto; */
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    gap: 1rem;
+}
+
+
+.links-div {
+    display: flex;
+    justify-content: space-around;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.tab {
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: rgba(129, 129, 141, 1);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.tab.active {
+    color: rgba(7, 10, 28, 1);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 10px;
+    text-decoration-thickness: 2px;
+}
+
+.join-text {
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+
+.data-login {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.center-data {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.text-data {
+    font-size: 1rem;
+    color: rgba(7, 10, 28, 1);
+    margin-left: 0.2rem;
+    font-weight: 500;
+}
+input {
+    height: 2.625rem; 
+    padding: 0.625rem 1rem; 
+    font-size: 0.9375rem; 
+    border: 0.09375rem solid rgba(205, 206, 210, 1); 
+    border-radius: 0.625rem; 
+    width: 100%;
+}
+
+input::placeholder {
+    color: rgba(129, 129, 141, 1);
+}
+
+.input-eye {
+    position: relative;
+}
+
+.input-eye input {
+    padding-right: 2.5rem; 
+}
+
+.eye-img {
+    position: absolute;
+    right: 0.75rem; 
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.375rem; 
+    height: 1.375rem;
+    cursor: pointer;
+}
+
+.login-button {
+    margin-top: 0.1rem;
+    padding: 1rem;
+    background-color: rgba(84, 60, 82, 1);
+    height: 3.25rem; 
+    width: 100%;
+    color: white;
+    border: none;
+    border-radius: 50rem; 
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-button:hover {
+    background-color: #2e1f3d;
+}
+
+input:focus {
+    outline: none;
+    border-color: rgba(84, 60, 82, 0.8);
+    transition: 3 ease;
+}
+
+@media (max-width: 25rem) { 
+    .form-register {
+        padding: 1.5rem;
+    }
+
+    .tab {
+        font-size: 1.5rem;
+    }
+}
+
+.join-text {
+    margin-bottom: 0.75rem;
+}
+
+.qrcode-img{
+    width: 100%;
+    height: auto;
+    max-width: 10rem;
+    margin: 0 auto;
+    display: block;
+}
