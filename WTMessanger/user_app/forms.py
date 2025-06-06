@@ -57,8 +57,8 @@ class LoginForm(AuthenticationForm):
     def __init__(self, request=None, *args, **kwargs):
         super().__init__(request, *args, **kwargs)
         self.fields["username"].label = "Email"
-        self.fields["username"].widget.attrs.update({"class": "data-input noimg"})
-        self.fields["password"].widget.attrs.update({"class": "data-input-img"})
+        self.fields["username"].widget.attrs.update({"class": "data-input noimg", 'placeholder': "you@example.com"})
+        self.fields["password"].widget.attrs.update({"class": "data-input-img", 'placeholder': "Введи пароль"})
 
     def clean(self):
         email = self.cleaned_data.get("username")

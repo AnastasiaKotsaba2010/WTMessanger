@@ -4,7 +4,7 @@
 {% block title %} Login page {% endblock %}
 
 {% block links %}
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login/login.css' %}">
     <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
 {% endblock %}
 
@@ -14,13 +14,12 @@
         <form class="form-login" method="post">
             {% csrf_token %}
             <div class="links-div">
-                <a href="/user/register" class="reg-link">Рєєстрація</a>
-                <a href="/user/login" class="login-link">Авторизація</a>
+                <a href="/user/register" class="tab">Рєєстрація</a>
+                <a href="/user/login" class="tab active">Авторизація</a>
             </div>
             
             <p class="join-text">Раді тебе знову бачити!</p>
             <div class = "data-login">
-
                 <div class="center-data noimg">
                     <p class="text-data">Електронна адреса</p>
                     {{ form.username.errors }}
@@ -32,7 +31,7 @@
                     {{ form.password.errors }}
                     <div class="input-eye">
                         {{ form.password }}
-                        <img src="{% static 'images/eye.png' %}" alt="" class="eye-img" >
+                        <img src="{% static 'images/closed_eye.svg' %}" alt="" class="eye-img" id="eye-icon">
                     </div>
                 </div>
             </div>
@@ -43,5 +42,9 @@
 
         </form>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/password_visibility/password_visibility.js' %}"></script>
 {% endblock %}
 

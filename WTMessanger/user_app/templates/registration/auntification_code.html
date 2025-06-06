@@ -4,7 +4,7 @@
 {% block title %} Confirmation code {% endblock %}
 
 {% block links %}
-    <link rel="stylesheet" href="{% static 'css/code.css' %}">
+    <link rel="stylesheet" href="{% static 'css/registration/auntification_code.css' %}">
     <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
 {% endblock %}
 
@@ -12,8 +12,8 @@
     <div class="center-div">
         <form class="user-code-form" method="post">
             {% csrf_token %}
-            <p class="main-confirm">Підтвердження пошти</p>
-            <p class="send-text">Ми надіслали 6-значний код на вашу пошту ({{ email }}). Введіть його нижче, щоб підтвердити акаунт</p>
+            <h2 class="main-confirm">Підтвердження пошти</h2>
+            <p class="send-text">Ми надіслали 6-значний код на вашу пошту (<strong>{{ email }}</strong>). Введіть його нижче, щоб підтвердити акаунт</p>
 
             <div class="center-data">
                 <p class="text-data">Код підтвердження</p>
