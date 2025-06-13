@@ -35,7 +35,8 @@
                             <img src="{% static 'images/chat.svg' %}" alt="chat">Чати
                         </a>
         
-                        <a href="#" class="page-link {% if request.path == '/setings/' %}active{% endif %} "> 
+                        <a href="{% url 'settings:albums' %}" 
+                            class="page-link {% if request.path|slice:':9' == '/settings/' %}active{% endif %}">
                             <img src="{% static 'images/settings.svg' %}" alt="settings">Налаштування
                         </a>
                     </nav>
