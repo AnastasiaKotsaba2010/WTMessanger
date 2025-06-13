@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}{% endblock title %}</title>
-        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+        <link rel="stylesheet" href="{% static 'css/base1.css' %}">
         <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
 
         {% block links %}
@@ -62,9 +62,25 @@
             <main class="main-content">
 
                 <div class="sidebar">
-                    {% block sidebar %}
-                        
-                    {% endblock %}
+
+                    <div class="sidebar-profile">
+                        {% block sidebar %}
+                            
+                        {% endblock %}
+                    </div>
+    
+                    <div class="sidebar-requests">
+                        {% block requests %}
+                            
+                        {% endblock %}
+                    </div>
+                    
+                    <div class="sidebar-messages">
+                        {% block messages %}
+                            
+                        {% endblock %}
+                    </div>
+
                 </div>
 
                 <div class="scrollbar-block">

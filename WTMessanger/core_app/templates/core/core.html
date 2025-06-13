@@ -4,107 +4,172 @@
 {% block title %} Home Page {% endblock %}
 
 {% block links %}
-    <link rel="stylesheet" href="{% static 'css/core.css' %}">
+    <link rel="stylesheet" href="{% static 'css/core_style.css' %}">
     <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
 {% endblock %}
 
-<!-- <div class="overlay">
-    <div class="profile-details">
-        <h3>Додай деталі про себе</h3>
-        <form class="form-profile-details" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button class="continue-button" type="submit">Продовжити</button>
-        </form>
+{% block scrollbar %}
+    {% if show_detail_form %}
+        <div class="overlay">
+            <div class="center-div">
+                <h3 class="add-details-text">Додай деталі про себе</h3>
+                <form class="form-profile-details" method="post" enctype="multipart/form-data" action="{% url 'details' %}">
+                    {% csrf_token %}
 
-        <p class="help-text-1">Або оберіть: </p>
-        <p class="help-text-2">Запропоновані варіанти відповідно до Ім’я та Прізвища</p>
+                    <div class="data-details">
+                        <div class="center-data noimg">
+                            <p class="text-data">Ім’я</p>
+                            {{ form.name }}
+                        </div>
+
+                        <div class="center-data noimg">
+                            <p class="text-data">Прізвище</p>
+                            {{ form.last_name }}
+                        </div>
+
+                        <div class="center-data noimg">
+                            <p class="text-data">Ім’я користувача</p>
+                            {{ form.username }}
+                        </div>
+
+                    </div>
+                    <p class="help-text-1">Або оберіть: <span class="help-text-2">Запропоновані варіанти відповідно до Ім’я та Прізвища</span></p>
+                    <button class="continue-button" type="submit">Продовжити</button>
+                </form>
+        
+            </div>
+        </div>
+    {% else %}
+        <div class="posts">
+            {% for post in posts %}
+                <div class="post-header">
+                    <div class="post-header-info">
+                        <img src="{% static 'images/.svg' %}" alt="avatar">
+                        <h2>{{ post.author }}</h2>
+                    </div>
+        
+                    <div class="user-signature">
+                        <img src="{% static 'images/signature.svg' %}" alt="signature">
+                    </div>
+                </div>
+
+                <div class="post-images">
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" alt="Post Image" class="post-image">
+                    {% endif %}
+                </div>
+
+                <div class="post-content">
+                    <p>{{ post.topic }}</p>
+                    <p>{{ post.content }}</p>
+                </div>
+
+                <div class="post-likes">
+
+                    <div class="wrapper-like">
+                        <img src="{% static 'images/like.svg' %}" alt="">
+                        <p>0 Вподобань</p>
+                    </div>
+
+                    <div class="wrapper-like">
+                        <img src="{% static 'images/eye.svg' %}" alt="">
+                        <p>0 Переглядів</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
+    
+{% block sidebar %}
+    <div class="account-info">
+        <div class="profile-picture">
+            <img src="{% static 'images/profile_img.svg' %}" alt="profile picture">
+        </div>
+
+        <div class="names">
+            <h2>{{ profile_name }}</h2>
+            <h3>{{ profile_username }}</h3>
+        </div>
+
+        <div class="basic-acc-info">
+            <div class="acc-info">
+                <h4 class="txt-amount">0</h4>
+                <p class="txt-under">Дописи</p>
+            </div>
+            
+            <div class="acc-info" id="1">
+                <h4 class="txt-amount">0</h4>
+                <p class="txt-under">Читачі</p>
+            </div>
+            <div class="acc-info">
+                <h4 class="txt-amount">0</h4>  
+                <p class="txt-under">Друзі</p>
+            </div>
+        </div>
     </div>
+{% endblock %}
 
-</div> -->
-<!-- {% block pop-up %}
-{% endblock %} -->
-<!--     
-    
-        <div class="account-info">
-                    <div class="profile-picture">
-                        <img src="{% static 'home/media/profile-picture.svg' %}" alt="Profile Picture">
-                    </div>
-        
-                    <div class="names">
-                        <h2>Username</h2>
-                        <h3>@account</h3>
-                    </div>
-        
-                    <div class="basic-acc-info">
-                        <div class="acc-info">
-                            <h4 class="txt-amount">566</h4>
-                            <p class="txt-under">Дописи</p>
-                        </div>
-                        
-                        <div class="acc-info" id="1">
-                            <h4 class="txt-amount">12.1K</h4>
-                            <p class="txt-under">Читачі</p>
-                        </div>
-                        <div class="acc-info">
-                            <h4 class="txt-amount">222</h4>  
-                            <p class="txt-under">Друзі</p>
-                        </div>
-                    </div>
+{% block requests %}                        
+    <div class="following-requests">
+        <div class="request-tabs">
+            <p class="txt-req"> <img src="{% static 'images/people_gr.svg' %}" alt="people">Запити</p>
+            <button class="show-all-btn">Дивитись всі</button>
         </div>
-    
-        <div class="following-requests">
-                    <div class="request-tabs">
-                        <p class="txt-req"> <img src="{% static 'home/media/people_gr.svg' %}" alt="people">Запити</p>
-                        <button class="show-all-btn">Дивитись всі</button>
-                    </div>
-        
-                    <div class="requests">
-                        <div class="user-info">
-                            <img src="{% static 'home/media/avatar.svg' %}" alt="Profile Picture">
-                            
-                            <div class="txt-info-acc">
-                                <h4 class="username-short">Username</h4>
-                                <p class="desc-short">4.3k підписників</p>
-                            </div>
-                        </div>
-        
-                        <div class="user-info">
-                            <img src="{% static 'home/media/avatar.svg' %}" alt="Profile Picture">
-                            
-                            <div class="txt-info-acc">
-                                <h4 class="username-short">Username</h4>
-                                <p class="desc-short">4.3k підписникі</p>
-                            </div>
-                        </div>
-                    </div>
+
+        <div class="requests">
+            <div class="user-info">
+                <img src="{% static 'home/media/avatar.svg' %}" alt="Profile Picture">
+                
+                <div class="txt-info-acc">
+                    <h4 class="username-short">Username</h4>
+                    <p class="desc-short">0 підписників</p>
+                </div>
+            </div>
+            
+            <div class="user-info">
+                <img src="{% static 'home/media/avatar.svg' %}" alt="Profile Picture">
+                
+                <div class="txt-info-acc">
+                    <h4 class="username-short">Username</h4>
+                    <p class="desc-short">0 підписників</p>
+                </div>
+            </div>
         </div>
-    
-        <div class="messages">
-                    <div class="request-tabs">
-                        <p class="txt-req"> <img src="{% static 'home/media/chat.svg' %}" alt="people">Повідомлення</p>
-                        <button class="show-all-btn">Дивитись всі</button>
-                    </div>
+    </div>
+{% endblock %}
+
+
+{% block messages %}
+   <div class="messages">
+        <div class="request-tabs">
+            <p class="txt-req"> <img src="{% static 'images/chat.svg' %}" alt="people">Повідомлення</p>
+            <button class="show-all-btn">Дивитись всі</button>
+        </div>
         
-                    <div class="requests">
-                        <div class="user-info">
-                            <img src="{% static 'home/media/avatar.svg' %}" alt="Profile Picture">
-                            
-                            <div class="txt-info-acc">
-                                <h4 class="username-short">Username</h4>
-                                <p class="desc-short">Привіт! Як справи?</p>
-                            </div>
-                            <p class="date">21.09.2023</p>
-                        </div>
-        
-                        <div class="user-info">
-                            <img src="{% static 'home/media/avatar.svg' %}" alt="Profile Picture">
-                            
-                            <div class="txt-info-acc">
-                                <h4 class="username-short">Username</h4>
-                                <p class="desc-short">Привіт! Як справи?</p>
-                            </div>
-                            <p class="date">21.09.2023</p>                 
-                        </div>
-                    </div>
-        </div> -->
+        <div class="requests">
+            <div class="user-info">
+                <img src="{% static 'home/media/avatar.svg' %}" alt="Profile Picture">
+                
+                <div class="txt-info-acc">
+                    <h4 class="username-short">Username</h4>
+                    <p class="desc-short">Привіт! Як справи?</p>
+                </div>
+                <p class="date">21.09.2023</p>
+            </div>
+            <div class="user-info">
+                <img src="{% static 'home/media/avatar.svg' %}" alt="Profile Picture">
+                
+                <div class="txt-info-acc">
+                    <h4 class="username-short">Username</h4>
+                    <p class="desc-short">Привіт! Як справи?</p>
+                </div>
+                <p class="date">21.09.2023</p>                 
+            </div>
+        </div>
+    </div>                         
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/core.js' %}"></script>
+{% endblock %}

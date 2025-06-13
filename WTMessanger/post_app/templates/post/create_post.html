@@ -1,10 +1,165 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %} Post Page {% endblock %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'css/post_styles.css' %}">
+    <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
+{% endblock %}
+    
+{% block sidebar %}
+    <div class="account-info">
+        <div class="profile-picture">
+            <img src="{% static 'images/profile_img.svg' %}" alt="profile picture">
+        </div>
+
+        <div class="names">
+            <h2>{{ profile_name }}</h2>
+            <h3>{{ profile_username }}</h3>
+        </div>
+
+        <div class="basic-acc-info">
+            <div class="acc-info">
+                <h4 class="txt-amount">-</h4>
+                <p class="txt-under">Дописи</p>
+            </div>
+            
+            <div class="acc-info" id="1">
+                <h4 class="txt-amount">-</h4>
+                <p class="txt-under">Читачі</p>
+            </div>
+            <div class="acc-info">
+                <h4 class="txt-amount">-</h4>  
+                <p class="txt-under">Друзі</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
 {% block scrollbar %}
-    <h2>Створити публікацію</h2>
-    <form method = "post" enctype = "multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type = "submit">Опублікувати</button>
-    </form>
+    <div class="overlay">
+        <div class="center-div">
+            <h2 class="create-post-text">Створення публікації</h2>
+            <form method = "post" enctype = "multipart/form-data" class="form-create-post">
+                {% csrf_token %}
+
+                <div class="data-details">
+                    <div class="center-data noimg">
+                        <p class="text-data">Назва публікації</p>
+                        {{ form.title }}
+                    </div>
+
+                    <div class="center-data noimg">
+                        <p class="text-data">Тема публікації</p>
+                        {{ form.topic }}
+                    </div>
+
+                    <div class="tags">
+                        <p>#відпочинок</p>
+                        <p>#натхення</p>
+                        <p>#життя</p>
+                        <p>#природа</p>
+                        <p>#читання</p>
+                        <p>#спокій</p>
+                        <p>#гармонія</p>
+                        <p>#музика</p>
+                        <p>#фільми</p>
+                        <p>#подорожі</p>
+
+                        <button class="add-tag" type="button" onclick="addTagField()">
+                            <img src="{% static 'images/plus.svg' %}" alt="stickers">
+                        </button>
+
+                    </div>
+                    
+                    <div id="tag-inputs-wrapper" class="tag-inputs-wrapper"></div>
+
+                    <div class="center-data noimg">
+                        {{ form.content }}
+                    </div>
+                    
+                    <!-- <div class="center-data noimg">
+                        <p class="text-data">Посилання</p>
+                        
+
+                        <div class="url-input-wrapper">
+                            <div id="links-wrapper" class="links-wrapper">
+                                <input type="url" name="links" class="form-control" placeholder="Введіть посилання">
+                            </div>
+                            
+                            <button class="add-url" type="button" onclick="addLinkField()">
+                                <img src="{% static 'images/plus.svg' %}" alt="stickers">
+                            </button>
+                        </div>
+                        
+                    </div> -->
+                    
+                    <div class="center-data noimg">
+                        {{ form.image }}
+                    </div>
+                </div>
+                
+                <div class="control-buttons">
+
+                    <!-- <label for="image-upload" class="upload-label">
+                        <img src="{% static 'images/image-button.svg' %}" alt="Завантажити картинку">
+                    </label> -->
+                    
+                    <button class="stickers" type="button"><img src="{% static 'images/stickers.svg' %}" alt="stickers"></button>
+                    <button class="post-button" type="submit">Публікація <img src="{% static 'images/plane.svg' %}" alt="літак"></button>
+                </div>
+            </form>
+            {% if form.errors %}
+                <div class="form-errors">
+                    {{ form.errors }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="posts">
+        {% for post in  posts %}
+            <div class="post-header">
+                <div class="post-header-info">
+                    <img src="{% static 'images/.svg' %}" alt="avatar">
+                    <h2>{{ post.author }}</h2>
+                </div>
+    
+                <div class="user-signature">
+                    <img src="{% static 'images/signature.svg' %}" alt="signature">
+                </div>
+            </div>
+
+            <div class="post-images">
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="Post Image" class="post-image">
+                {% endif %}
+            </div>
+
+            <div class="post-content">
+                <p>{{ post.topic }}</p>
+                <p>{{ post.content }}</p>
+            </div>
+
+            <div class="post-likes">
+
+                <div class="wrapper-like">
+                    <img src="{% static 'images/like.svg' %}" alt="">
+                    <p>0 Вподобань</p>
+                </div>
+
+                <div class="wrapper-like">
+                    <img src="{% static 'images/eye.svg' %}" alt="">
+                    <p>0 Переглядів</p>
+                </div>
+
+            </div>
+
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/post.js' %}"></script>
 {% endblock %}

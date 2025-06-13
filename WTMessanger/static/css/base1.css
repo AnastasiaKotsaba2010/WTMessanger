@@ -41,36 +41,57 @@ html {
     padding: 2rem 5rem;
     background-color: rgba(250, 248, 255, 1);
 }
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem; 
 
-.sidebar{
+    position: fixed;
+}
+
+.sidebar-profile {
     width: 25vw;
     height: auto;
 
     background-color: white;
-    padding: 2rem;
+    padding: 1.5rem;
 
-    position: fixed;
+    border: 0.5px solid rgba(205, 206, 210, 1);
+    border-radius: 0.625rem;
+}
+
+.sidebar-requests {
+    width: 25vw;
+    height: auto;
+
+    background-color: white;
+    padding: 1.5rem;
+
+    border: 0.5px solid rgba(205, 206, 210, 1);
+    border-radius: 0.625rem;
+}
+
+.sidebar-messages {
+    width: 25vw;
+    height: auto;
+
+    background-color: white;
+    padding: 1.5rem;
+
     border: 0.5px solid rgba(205, 206, 210, 1);
     border-radius: 0.625rem;
 
-    /* display: flex; */
-    /* flex-direction: column; */
-    /* justify-content: flex-start; */
-    /* gap: 1.5rem; */
-    /* top: 4.5rem; */
-    /* left:  3.5rem; */
+    overflow-y: auto;
 }
 
+
 .scrollbar{
-    /* 42vw; */
     padding: 2rem;
     width: 100%;
-    
     
     border: 0.5px solid rgba(205, 206, 210, 1);
     border-radius: 0.625rem;
     background-color: white;
-    
 }
 
 .scrollbar-block{
