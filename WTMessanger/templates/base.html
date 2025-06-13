@@ -1,17 +1,98 @@
-<html>
+{% load static %}
+<html lang="en">
     <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>{% block title %}{% endblock %}</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-        {% block links %}{% endblock %}
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}{% endblock title %}</title>
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+        <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
+
+        {% block links %}
+        {% endblock links %}
     </head>
     <body>
+        <header>
+            {% if request.user.is_authenticated %}
+                <div class="div-header">
+                    <div class="header-logo">
+                        <img src="{% static 'images/logo.svg' %}" alt="logo">
+                    </div>
 
-        {% block content %}{% endblock %}
-        {% block scripts %}{% endblock %}
-        <script src="" async defer></script>
+                    <nav class="header-nav">
+                        <a href="{% url 'core' %}" class="page-link {% if request.path == '/' %}active{% endif %}">
+                            <img src="{% static 'images/home.svg' %}" alt="home">Головна
+                        </a>
+        
+                        <a href="{% url 'create_post' %}" class="page-link {% if request.path == '/create/post/' %}active{% endif %}">
+                            <img src="{% static 'images/gallery.svg' %}" alt="gallery">Мої публікації
+                        </a>
+        
+                        <a href="#" class="page-link {% if request.path == '/user_app/friends/' %}active{% endif %}"> 
+                            <img src="{% static 'images/people.svg' %}" alt="friends">Друзі
+                        </a>
+        
+                        <a href="#" class="page-link {% if request.path == '/chats/' %}active{% endif %}"> 
+                            <img src="{% static 'images/chat.svg' %}" alt="chat">Чати
+                        </a>
+        
+                        <a href="{% url 'settings:albums' %}" 
+                            class="page-link {% if request.path|slice:':9' == '/settings/' %}active{% endif %}">
+                            <img src="{% static 'images/settings.svg' %}" alt="settings">Налаштування
+                        </a>
+                    </nav>
+
+                    <div class="header-logout-btn">
+                        <form action="{% url 'logout' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="logout-btn"> 
+                                <img src="{% static 'images/logout.svg' %}" alt="logout-btn"> Вихід
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <div class="div-header-not-authenticated">
+                    <div class="header-logo">
+                        <img src="{% static 'images/logo.svg' %}" alt="logo">
+                    </div>
+                </div>
+            {% endif %}
+        </header>
+
+        {% if request.user.is_authenticated %}
+            <main class="main-content">
+
+                <div class="sidebar">
+                    {% block sidebar %}
+                        
+                    {% endblock %}
+                </div>
+
+                <div class="scrollbar-block">
+                    <div class="text-block">
+                        <div class="textarea-wrapper">
+                            <textarea name="" id="" class="text-area" placeholder="Текст публікації"></textarea>
+    
+                            <div class="design-btns">
+                                <button class="stickers"><img src="{% static 'images/stickers.svg' %}" alt="stickers"></button>
+                                <button class="design-btn">Перейти до оформлення</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scrollbar">
+                        {% block scrollbar %}
+    
+                        {% endblock scrollbar %}
+                    </div>
+                </div>
+            </main>
+        {% else %}
+            <main class="main-content-non-authenticated">
+                {% block content %}
+                {% endblock content %}
+            </main>
+        {% endif %}
+        {% block scripts %}{% endblock scripts %}
     </body>
-</html>
+</html>     
