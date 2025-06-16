@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}{% endblock title %}</title>
-        <link rel="stylesheet" href="{% static 'css/base1.css' %}">
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
         <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
 
         {% block links %}
@@ -35,7 +35,7 @@
                             <img src="{% static 'images/chat.svg' %}" alt="chat">Чати
                         </a>
         
-                        <a href="#" class="page-link {% if request.path == '/setings/' %}active{% endif %} "> 
+                        <a href="{% url 'settings' %}" class="page-link {% if request.path == '/settings/' %}active{% endif %} "> 
                             <img src="{% static 'images/settings.svg' %}" alt="settings">Налаштування
                         </a>
                     </nav>

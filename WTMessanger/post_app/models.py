@@ -1,33 +1,79 @@
 from django.db import models
-from user_app.models import WTUser
+# from user_app.models import WTUser
 from core_app.models import WtUser_Profile
+# from user_app.models import Profile
 
-
-# class PostTag(models.Model):
-#     tag_name = models.CharField(max_length=100, blank=True, null=True)
+# class WTUserPost1(models.Model):
+#     author = models.ForeignKey(WtUser_Profile, on_delete=models.CASCADE, related_name='posts')
+    
+#     title = models.CharField(max_length=200)
+    
+#     topic = models.CharField(max_length=200, blank=True, null=True)
+    
+#     tags = models.ManyToManyField(Tag, blank=True, related_name='posts')
+    
+#     content = models.TextField(blank=True, null=True)
+#     image = models.ImageField(upload_to='post_images/', blank=True, null=True)
+    
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
 
 #     def __str__(self):
-#         return self.tag_name
+#         return self.title
 
-# class PostUrl(models.Model):
-#     post = models.ForeignKey("WTUserPost", on_delete=models.CASCADE, related_name='links', default= None)
-#     url = models.URLField(default= None)
 
-#     def __str__(self):
-#         return self.url
-class WTUserPost(models.Model):
-    author = models.ForeignKey(WtUser_Profile, on_delete=models.CASCADE, related_name='posts')
+class Post(models.Model):
+    author = models.ForeignKey(WtUser_Profile, on_delete=models.CASCADE)
     
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=255)
     
-    topic = models.CharField(max_length=200, blank=True, null=True)
+    topic = models.CharField(max_length=200) # нове поле
     
-    content = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to='post_images/', blank=True, null=True)
+    content = models.TextField(max_length=4096)
     
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    images = models.ManyToManyField('Image', blank=True, related_name='posts_authored')
+    
+    views = models.ManyToManyField(WtUser_Profile, blank=True, related_name='posts_viewed')
+    
+    likes = models.ManyToManyField(WtUser_Profile, blank=True, related_name='posts_liked')
+    
+    tags = models.ManyToManyField('Tag', blank=True)
 
-    def __str__(self):
+    def str(self):
         return self.title
 
+
+class Image(models.Model):
+    filename = models.CharField(max_length=150)
+    file = models.ImageField(upload_to='images/posts')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def str(self):
+        return self.filename
+    
+
+class Album(models.Model):
+    name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    preview_image = models.ImageField(upload_to='images/album_previews', null=True, blank=True)
+    images = models.ManyToManyField(Image, blank=True)
+    shown = models.BooleanField(default=True) 
+    topic = models.ForeignKey('Tag', on_delete=models.CASCADE)
+
+    def str(self):
+        return self.name
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True, default=None)
+
+    def str(self):
+        return self.name
+    
+
+class Link(models.Model):
+    url = models.URLField(max_length=200)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+    def str(self):
+        return f'Посилання для поста "{self.post}"'

@@ -51,8 +51,6 @@ class RegistrationForm(forms.ModelForm):
             user.save()
         return user
 
-
-
 class LoginForm(AuthenticationForm):
     def __init__(self, request=None, *args, **kwargs):
         super().__init__(request, *args, **kwargs)
@@ -68,9 +66,6 @@ class LoginForm(AuthenticationForm):
             if self.user_cache is None:
                 raise ValidationError("Невірна пошта або пароль")
         return self.cleaned_data
-
-
-
 
 class CodeVerificationForm(forms.Form):
     def __init__(self, *args, **kwargs):
@@ -102,6 +97,3 @@ class CodeVerificationForm(forms.Form):
         cleaned_data['full_code'] = full_code
         return cleaned_data
 
-    
-    
-    
