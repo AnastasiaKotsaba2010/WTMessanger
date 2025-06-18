@@ -1,27 +1,6 @@
 from django.db import models
-# from user_app.models import WTUser
-from core_app.models import WtUser_Profile
-# from user_app.models import Profile
-
-# class WTUserPost1(models.Model):
-#     author = models.ForeignKey(WtUser_Profile, on_delete=models.CASCADE, related_name='posts')
-    
-#     title = models.CharField(max_length=200)
-    
-#     topic = models.CharField(max_length=200, blank=True, null=True)
-    
-#     tags = models.ManyToManyField(Tag, blank=True, related_name='posts')
-    
-#     content = models.TextField(blank=True, null=True)
-#     image = models.ImageField(upload_to='post_images/', blank=True, null=True)
-    
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-
-#     def __str__(self):
-#         return self.title
-
-
+from user_app.models import Profile
+WtUser_Profile = Profile
 class Post(models.Model):
     author = models.ForeignKey(WtUser_Profile, on_delete=models.CASCADE)
     

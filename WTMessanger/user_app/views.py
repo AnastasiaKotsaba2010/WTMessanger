@@ -2,46 +2,60 @@ from django.views.generic.edit import FormView
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.core.mail import send_mail
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.contrib.auth import login
 from django.contrib import messages
-from .forms import RegistrationForm, CodeVerificationForm, LoginForm
-from .models import WTUser
+from django.views import View
+from .forms import RegistrationForm
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.models import User
 import random, string 
+from django.http import HttpRequest
+from .models import Profile
 # Create your views here.
 
 
-class RegistrationView(FormView):
+class RegistrationView(View):
     
     template_name = 'registration/registration.html'
-    form_class = RegistrationForm
-    success_url = reverse_lazy('register-verify')
+
+
+    def get(self, request):
+        return render(request=request ,template_name= self.template_name, context={'form': RegistrationForm})
     
-    def form_valid(self, form):
-        self.request.session['registration_data'] = {
-            'email': form.cleaned_data['email'],
-            'password': form.cleaned_data['password'],
-        }
+    def post(self, request: HttpRequest):
+        form = RegistrationForm(request.POST)
+    
+        if form.is_valid():
         
-        code = ''.join(random.choices(string.digits, k = 6))
-        self.request.session['verification_code'] = code
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            password2 = form.cleaned_data['password2']
+
+            if password == password2:
+                user_profile = User.objects.create_user(
+                    username= username,
+                    password= password,
+                    email= ''
+                )
+                # user_profile.is_active = False 
+                
+                profile = Profile.objects.create(
+                    user = user_profile
+                )
+                user_profile.save()
+            else:
+
+                pass
+                # user_profile.save()
         
-        send_mail(
-            subject = 'Код підтвердження реєстрації',
-            message = f'Ваш код підтвердження: {code}',
-            from_email = None,
-            recipient_list = [form.cleaned_data['email']],
-            fail_silently = False,
-        )
-        
-        messages.success(self.request, 'Код підтвердження відправлено на ваш email')
-        return super().form_valid(form)
+        return render(request=request ,template_name= self.template_name, context={'form': RegistrationForm})
+    
 
 
 class LoginUserView(LoginView):
     template_name = 'login/login.html'
-    authentication_form = LoginForm
+    # authentication_form = LoginForm
     redirect_authenticated_user = True
     next_page = reverse_lazy('core')
 
@@ -53,7 +67,7 @@ class UserLogoutView(LogoutView):
 
 class CodeVerificationView(FormView):
     template_name = 'registration/auntification_code.html'
-    form_class = CodeVerificationForm
+    # form_class = CodeVerificationForm
     success_url = reverse_lazy('core')
     
     def dispatch(self, request, *args, **kwargs):
@@ -72,12 +86,12 @@ class CodeVerificationView(FormView):
             return self.form_invalid(form)
         
         registration_data = self.request.session['registration_data']
-        user = WTUser.objects.create_user(
-            email = registration_data['email'],
-            password = registration_data['password']
-        )
+        # user = WTUser.objects.create_user(
+        #     email = registration_data['email'],
+        #     password = registration_data['password']
+        # )
         
-        login(self.request, user)
+        # login(self.request, user)
         
         for key in ['registration_data', 'verification_code']:
             if key in self.request.session:

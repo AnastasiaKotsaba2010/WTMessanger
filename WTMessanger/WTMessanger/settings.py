@@ -43,8 +43,6 @@ INSTALLED_APPS = [
     'post_app',
 ]
 
-AUTH_USER_MODEL = 'user_app.WTUser'
-
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
