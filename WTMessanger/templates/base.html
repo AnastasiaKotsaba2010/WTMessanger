@@ -23,11 +23,11 @@
                             <img src="{% static 'images/home.svg' %}" alt="home">Головна
                         </a>
         
-                        <a href="{% url 'create_post' %}" class="page-link {% if request.path == '/create/post/' %}active{% endif %}">
+                        <a href="#" class="page-link {% if request.path == '/create/post/' %}active{% endif %}">
                             <img src="{% static 'images/gallery.svg' %}" alt="gallery">Мої публікації
                         </a>
         
-                        <a href="#" class="page-link {% if request.path == '/user_app/friends/' %}active{% endif %}"> 
+                        <a href="{% url 'main_friends' %}" class="page-link {% if request.path == '/user_app/friends/main/' %}active{% endif %}"> 
                             <img src="{% static 'images/people.svg' %}" alt="friends">Друзі
                         </a>
         
@@ -35,7 +35,7 @@
                             <img src="{% static 'images/chat.svg' %}" alt="chat">Чати
                         </a>
         
-                        <a href="{% url 'settings' %}" class="page-link {% if request.path == '/settings/' %}active{% endif %} "> 
+                        <a href="#" class="page-link {% if request.path == '/settings/' %}active{% endif %} "> 
                             <img src="{% static 'images/settings.svg' %}" alt="settings">Налаштування
                         </a>
                     </nav>
@@ -111,3 +111,4 @@
         {% block scripts %}{% endblock scripts %}
     </body>
 </html>     
+

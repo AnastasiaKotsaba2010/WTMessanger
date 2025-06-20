@@ -4,59 +4,130 @@
 {% block title %} Registration page {% endblock %}
 
 {% block links %}
-    <link rel="stylesheet" href="{% static 'css/registration/registrations.css' %}">
+    <link rel="stylesheet" href="{% static 'css/registration/registration.css' %}">
     <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
 {% endblock %}
 
 
 {% block content %} 
-    <div class="center-wrapper">
-        <div class="center-div">
-            <form class="form-register" method="post">
+    {% if form %}
+        <div class="center-wrapper">
+            <div class="center-div">
+                <form class="form-register" method="post">
+                    {% csrf_token %}
+                    
+                    <div class="links-div">
+                        <a href="/user/register" class="tab active">Рєєстрація</a>
+                        <a href="/user/login" class="tab">Авторизація</a>
+                    </div>
+                    
+                    <p class="join-text">Приєднуйся до World IT!</p>
+                    <div class = "data-reg">
+                        <div class="center-data noimg">
+                            <p class="text-data">Електронна пошта</p>
+                            {{ form.username }}
+                        </div>
+        
+                        <div class="center-data">
+                            <p class="text-data">Пароль</p>
+                            {{ form.password.errors }}
+                            <div class="input-eye">
+                                {{ form.password }}
+                                <img src="{% static 'images/closed_eye.svg' %}" alt="" class="eye-img" id="eye-icon" >
+                            </div>
+                        </div>
+        
+                        <div class="center-data">
+                            <p class="text-data">Підтверди пароль</p>
+                            {{ form.password2.errors }}
+                            <div class="input-eye">
+                                {{ form.password2 }}
+                                <img src="{% static 'images/closed_eye.svg' %}" alt="" class="eye-img" id="eye-icon-conf" >
+                            </div>
+                        </div>
+                    </div>
+                    <button name="who_send" value="register" class="reg-button">Створити акаунт</button>
+                </form>
+            </div>
+        
+            <div class="image-wrapper">
+                <img src="{% static 'images/bg.svg' %}" alt="" class="bg-img">
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Code Verification -->
+    {% if form_code %}
+        <div class="center-div-code">
+            <form class="user-code-form" method="post">
                 {% csrf_token %}
-                
-                <div class="links-div">
-                    <a href="/user/register" class="tab active">Рєєстрація</a>
-                    <a href="/user/login" class="tab">Авторизація</a>
-                </div>
-                
-                <p class="join-text">Приєднуйся до World IT!</p>
-                <div class = "data-reg">
-                    <div class="center-data noimg">
-                        <p class="text-data">Електронна пошта</p>
-                        {{ form.username }}
-                    </div>
-    
-                    <div class="center-data">
-                        <p class="text-data">Пароль</p>
-                        {{ form.password.errors }}
-                        <div class="input-eye">
-                            {{ form.password }}
-                            <img src="{% static 'images/closed_eye.svg' %}" alt="" class="eye-img" id="eye-icon" >
+                <h2 class="main-confirm">Підтвердження пошти</h2>
+                <p class="send-text">Ми надіслали 6-значний код на вашу пошту (<strong>{{ email }}</strong>). Введіть його нижче, щоб підтвердити акаунт</p>
+
+                <div class="center-data">
+                    <p class="text-data-code">Код підтвердження</p>
+                    <div class="all-codes">
+
+                        <div class="twice-code">
+                            {{ form_code.code_1 }}
+                            {{ form_code.code_2 }}
                         </div>
-                    </div>
-    
-                    <div class="center-data">
-                        <p class="text-data">Підтверди пароль</p>
-                        {{ form.password2.errors }}
-                        <div class="input-eye">
-                            {{ form.password2 }}
-                            <img src="{% static 'images/closed_eye.svg' %}" alt="" class="eye-img" id="eye-icon-conf" >
+
+                        <div class="twice-code">
+                            {{ form_code.code_3 }}
+                            {{ form_code.code_4 }}
+                        </div>
+
+                        <div class="twice-code">
+                            {{ form_code.code_5 }}
+                            {{ form_code.code_6 }}
                         </div>
                     </div>
                 </div>
-                <button class="reg-button">Створити акаунт</button>
+
+                <button name="who_send" value="verification" class="create-button">Підтвердити</button>
+                <a href="{% url 'register' %}" class="back-link">Назад</a>
             </form>
         </div>
-    
-        <div class="image-wrapper">
-            <img src="{% static 'images/bg.svg' %}" alt="" class="bg-img">
+    {% endif %}
+
+    {% if show_detail_form %}
+        <div class="overlay">
+            <div class="center-div">
+                <h3 class="add-details-text">Додай деталі про себе</h3>
+                <form class="form-profile-details" method="post" enctype="multipart/form-data" action="{% url 'details' %}">
+                    {% csrf_token %}
+
+                    <div class="data-details">
+                        <div class="center-data noimg">
+                            <p class="text-data">Ім’я</p>
+                            {{ form.first_name }}
+                        </div>
+
+                        <div class="center-data noimg">
+                            <p class="text-data">Прізвище</p>
+                            {{ form.last_name }}
+                        </div>
+
+                        <div class="center-data noimg">
+                            <p class="text-data">Ім’я користувача</p>
+                            {{ form.name }}
+                        </div>
+
+                    </div>
+                    <p class="help-text-1">Або оберіть: <span class="help-text-2">Запропоновані варіанти відповідно до Ім’я та Прізвища</span></p>
+                    <button class="continue-button" type="submit" value="continue" name="who_send">Продовжити</button>
+                </form>
+        
+            </div>
         </div>
-    </div>
+    {% endif %}
+
 
 {% endblock %}
 
 
 {% block scripts %}
     <script src="{% static 'js/password_visibility/password_visibility.js' %}"></script>
+    <script src="{% static 'js/registration/code_input.js' %}"></script>
 {% endblock %}

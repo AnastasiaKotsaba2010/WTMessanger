@@ -12,16 +12,21 @@ class Profile(models.Model):
 class Avatar(models.Model):
     image = models.ImageField(upload_to='images/avatars')
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    active = models.BooleanField(default=True) # Чи активна ця аватарка (чи використовується вона у профілі)
-    shown = models.BooleanField(default=True) # Чи показана ця аватарка в альбомі минулих аватарок
+    active = models.BooleanField(default=True) 
+    shown = models.BooleanField(default=True) 
 
     def str(self):
         return f'Аватар для профілю {self.profile}'  
 
 class Friendship(models.Model):
-    profile1 = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='friendship_sent_request') # Той, хто надіслав запит на дружбу
-    profile2 = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='friendship_accepted_request') # Той, хто має прийняти запит на дружбу
-    accepted = models.BooleanField(default=False) # Чи прийнято запит на дружбу
-
+    profile1 = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='friendship_sent_request') 
+    profile2 = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='friendship_accepted_request') 
+    accepted = models.BooleanField(default=False) 
+    
     def str(self):
         return f'Дружба між {self.profile1} та {self.profile2}'
+    
+class VerificationCode(models.Model):
+    username = models.CharField(max_length= 150)
+    code = models.CharField(max_length= 255)
+    created_at = models.DateTimeField(auto_now_add= True)

@@ -1,5 +1,10 @@
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpRequest
+from django.shortcuts import render
+from .forms import UserDetailsForm
+
+
 # from user_app.models import WTUser
 # from django.views.generic.edit import CreateView
 # from .forms import WTUserProfileForm, PersonalInformationForm
@@ -9,24 +14,48 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # from django.views.generic.edit import FormView
 
 # # Create your views here.
-class CoreView(TemplateView):
+class CoreView(LoginRequiredMixin ,TemplateView):
     template_name = "core/core.html"
+    login_url = 'register' 
     
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    def get(self, request: HttpRequest):        
         
-        user = self.request.user
-        profile = getattr(self.request.user, 'profile', None)
+        if request.user.is_authenticated and request.session.get('show_detail_form', False):
+            return render(
+                request, 
+                self.template_name, 
+                context= {
+                    'form_details': UserDetailsForm(), 
+                    'show_detail_form': True
+                })
+
+    def post(self, request: HttpRequest):
+        # form = RegistrationForm(request.POST)
+        button = request.POST.get('who_send')
         
-        if profile:
-            context['profile_name'] = profile.name
-            context['profile_username'] = profile.username
+        if button == 'continue':
+            form = UserDetailsForm(request.POST)
+            
+            if form.is_valid():
+                first_name = form.cleaned_data['first_name']
+                last_name = form.cleaned_data['last_name']
+                name = form.cleaned_data['email']
+    
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+        
+    #     user = self.request.user
+    #     profile = getattr(self.request.user, 'profile', None)
+        
+    #     if profile:
+    #         context['profile_name'] = profile.name
+    #         context['profile_username'] = profile.username
         
         
-        context['show_detail_form'] = not getattr(profile, 'profile_completed', False)
+    #     context['show_detail_form'] = not getattr(profile, 'profile_completed', False)
 
             
-        return context
+    #     return context
 
 # class ProfileView(LoginRequiredMixin, CreateView):
 #     model = WtUser_Profile

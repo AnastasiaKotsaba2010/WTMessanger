@@ -1,4 +1,4 @@
-# from django import forms 
+from django import forms 
 # from .models import WtUser_Profile, ProfileCard
 
 # class WTUserProfileForm(forms.ModelForm):
@@ -77,3 +77,21 @@
 #                 }
 #             )
 #         }
+
+
+class UserDetailsForm(forms.Form):
+    first_name = forms.CharField(
+        max_length=30,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'data-input-img', 'placeholder': "Введіть Ваше ім’я"})
+    )
+    last_name = forms.CharField(
+        max_length=30,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'data-input-img', 'placeholder': "Введіть Ваше прізвище"})
+    )
+    name = forms.CharField(
+        max_length=30,
+        required=False, 
+        widget=forms.TextInput(attrs={'class': 'data-input-img', 'placeholder': "@"})
+    )

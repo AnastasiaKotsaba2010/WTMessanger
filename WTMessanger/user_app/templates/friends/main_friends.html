@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Friends page {% endblock %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'css/friends/friends.css' %}">
+    <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
+{% endblock %}
+
+{% block sidebar %}
+    <div class="friends-links">
+        <a href="{% url 'main_friends' %}" class="friends-link {% if request.path == '/user_app/friends/main/' %}active{% endif %}">
+            Головна
+        </a>
+        <a href="{% url 'friendship_requests' %}" class="friends-link {% if request.path == '/user_app/friends/requests/' %}active{% endif %}">
+            Запити
+        </a>
+        <a href="{% url 'recommended_friends' %}" class="friends-link {% if request.path == '/user_app/friends/recommended/' %}active{% endif %}">
+            Рекомендації
+        </a>
+        <a href="{% url 'all_friends' %}" class="friends-link {% if request.path == '/user_app/friends/all' %}active{% endif %}">
+            Всі друзі
+        </a>
+    </div>
+{% endblock %}
+
+{% block scrollbar %}
+    
+{% endblock %}
