@@ -4,33 +4,37 @@
 {% block title %} Post Page {% endblock %}
 
 {% block links %}
-    <link rel="stylesheet" href="{% static 'css/post_styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/post_style.css' %}">
     <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
 {% endblock %}
     
 {% block sidebar %}
     <div class="account-info">
         <div class="profile-picture">
-            <img src="{% static 'images/profile_img.svg' %}" alt="profile picture">
+            {% if avatar %}
+                <img src="{{ avatar.image.url }}" alt="" class="default-avatar">
+            {% else %}
+                <img src="{% static 'images/default_avatar.png' %}" alt="" class="default-avatar">
+            {% endif %}
         </div>
 
         <div class="names">
-            <h2>{{ profile_name }}</h2>
-            <h3>{{ profile_username }}</h3>
+            <h3>{{ user.first_name }} {{  user.last_name }}</h3>
+            <p class="username">{{ user.email }}</p>
         </div>
 
         <div class="basic-acc-info">
             <div class="acc-info">
-                <h4 class="txt-amount">-</h4>
+                <h4 class="txt-amount">0</h4>
                 <p class="txt-under">Дописи</p>
             </div>
             
             <div class="acc-info" id="1">
-                <h4 class="txt-amount">-</h4>
+                <h4 class="txt-amount">0</h4>
                 <p class="txt-under">Читачі</p>
             </div>
             <div class="acc-info">
-                <h4 class="txt-amount">-</h4>  
+                <h4 class="txt-amount">0</h4>  
                 <p class="txt-under">Друзі</p>
             </div>
         </div>
@@ -38,10 +42,15 @@
 {% endblock %}
 
 {% block scrollbar %}
-    <div class="overlay">
+    <div class="overlay" id="overlay">
         <div class="center-div">
-            <h2 class="create-post-text">Створення публікації</h2>
-            <form method = "post" enctype = "multipart/form-data" class="form-create-post">
+
+            <div class="post-header-popup">
+                <h2 class="create-post-text">Створення публікації</h2>
+                <a href="#" class="close-popup">×</a>
+            </div>
+
+            <form method = "post" enctype = "multipart/form-data" class="form-create-post" id="post-form">
                 {% csrf_token %}
 
                 <div class="data-details">
@@ -56,60 +65,58 @@
                     </div>
 
                     <div class="tags">
-                        <p>#відпочинок</p>
-                        <p>#натхення</p>
-                        <p>#життя</p>
-                        <p>#природа</p>
-                        <p>#читання</p>
-                        <p>#спокій</p>
-                        <p>#гармонія</p>
-                        <p>#музика</p>
-                        <p>#фільми</p>
-                        <p>#подорожі</p>
+                        <button class="add-basic-tag" type="button">#відпочинок</button>
+                        <button class="add-basic-tag" type="button">#натхнення</button>
+                        <button class="add-basic-tag" type="button">#життя</button>
+                        <button class="add-basic-tag" type="button">#природа</button>
+                        <button class="add-basic-tag" type="button">#читання</button>
+                        <button class="add-basic-tag" type="button">#спокій</button>
+                        <button class="add-basic-tag" type="button">#гармонія</button>
+                        <button class="add-basic-tag" type="button">#музика</button>
+                        <button class="add-basic-tag" type="button">#фільми</button>
+                        <button class="add-basic-tag" type="button">#подорожі</button>
 
-                        <button class="add-tag" type="button" onclick="addTagField()">
-                            <img src="{% static 'images/plus.svg' %}" alt="stickers">
+                        <button class="add-tag" type="button" id="add-tag-button">
+                            <img src="{% static 'images/plus.svg' %}" alt="Додати тег">
                         </button>
-
                     </div>
                     
                     <div id="tag-inputs-wrapper" class="tag-inputs-wrapper"></div>
 
-                    <div class="center-data noimg">
+                    <div class="center-data noimg" id="content-wrapper">
                         {{ form.content }}
                     </div>
-                    
-                    <!-- <div class="center-data noimg">
+
+                    <div class="center-data noimg">
                         <p class="text-data">Посилання</p>
                         
+                        <div class="url-input-wrapper" id="links-wrapper">
+                            <input type="url" name="links" class="form-control" placeholder="Введіть посилання">
 
-                        <div class="url-input-wrapper">
-                            <div id="links-wrapper" class="links-wrapper">
-                                <input type="url" name="links" class="form-control" placeholder="Введіть посилання">
-                            </div>
-                            
-                            <button class="add-url" type="button" onclick="addLinkField()">
-                                <img src="{% static 'images/plus.svg' %}" alt="stickers">
+                            <button class="add-url" type="button" id="add-link-button">
+                                <img src="{% static 'images/plus.svg' %}" alt="Додати посилання">
                             </button>
                         </div>
-                        
-                    </div> -->
-                    
-                    <div class="center-data noimg">
-                        {{ form.image }}
+
+                    </div>
+
+                    <div class="center-data noimg" style="display:none;">
+                        {{ form.images }}
                     </div>
                 </div>
                 
                 <div class="control-buttons">
-
-                    <!-- <label for="image-upload" class="upload-label">
-                        <img src="{% static 'images/image-button.svg' %}" alt="Завантажити картинку">
-                    </label> -->
+                    <label for="image-upload" class="upload-label" title="Додати зображення">
+                        <img src="{% static 'images/image-button.svg' %}" alt="Додати картинку" class="upload-img">
+                    </label>
                     
-                    <button class="stickers" type="button"><img src="{% static 'images/stickers.svg' %}" alt="stickers"></button>
-                    <button class="post-button" type="submit">Публікація <img src="{% static 'images/plane.svg' %}" alt="літак"></button>
+                    <input type="file" id="image-upload" name="image-upload" accept="image/*" style="display:none;" multiple>
+
+                    <button class="stickers-button" type="button"><img src="{% static 'images/stickers-button.svg' %}" alt="stickers"></button>
+                    <button class="post-button" type="submit">Публікація <img src="{% static 'images/plane.svg' %}" alt="літак"></button>            </div>
                 </div>
             </form>
+
             {% if form.errors %}
                 <div class="form-errors">
                     {{ form.errors }}
@@ -161,5 +168,5 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="{% static 'js/post.js' %}"></script>
+    <script src="{% static 'js/posts.js' %}"></script>
 {% endblock %}

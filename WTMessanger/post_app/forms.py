@@ -5,23 +5,28 @@ from .models import Post, Image, Album, Tag, Link
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'content', 'tags', 'images']
+        fields = ['title', 'topic', 'content', 'tags', 'images']
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Напишіть назву публікації'
             }),
+            'topic': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Напишіть тему публікаціїї'
+            }),
             'content': forms.Textarea(attrs={
                 'class': 'form-control',
-                'placeholder': 'Введіть опис публікації'
+                'placeholder': 'Введіть опис публікації',
+                'id': 'id_content'
             }),
             'tags': forms.SelectMultiple(attrs={
                 'class': 'form-control',
-                'placeholder': 'Оберіть теги'
+                # 'placeholder': 'Оберіть теги'
             }),
             'images': forms.SelectMultiple(attrs={
                 'class': 'form-control',
-                'placeholder': 'Оберіть зображення'
+                # 'placeholder': 'Оберіть зображення'
             }),
         }
 

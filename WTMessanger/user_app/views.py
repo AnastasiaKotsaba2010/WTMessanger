@@ -1,19 +1,18 @@
-from django.views.generic.edit import FormView
-from django.contrib.auth.views import LoginView
+from django.views.generic.edit import FormView, CreateView
 from django.urls import reverse_lazy
 from django.core.mail import send_mail
 from django.shortcuts import redirect, render
 from django.contrib.auth import login
 from django.contrib import messages
 from django.views import View
-from .forms import RegistrationForm, CodeVerificationForm, LoginForm
+from .forms import RegistrationForm, CodeVerificationForm, LoginForm, PersonalInformationForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView
 from core_app.forms import UserDetailsForm
 from django.contrib.auth.models import User
 import random, string 
 from django.http import HttpRequest
-from .models import Profile, VerificationCode
+from .models import Profile, VerificationCode, Avatar
 import random
 # Create your views here.
 
@@ -130,7 +129,13 @@ class LoginUserView(LoginView):
     
     def form_valid(self, form):
         response = super().form_valid(form)
-        self.request.session['show_detail_form'] = True
+
+        user = self.request.user
+        if not user.first_name or not user.last_name:
+            self.request.session['show_detail_form'] = True
+        else:
+            self.request.session['show_detail_form'] = False
+
         return response
         
     def get_success_url(self):
@@ -186,4 +191,47 @@ class FriendshipRequestView(View):
             return render(request, self.template_name, {'friendship_requests': friendship_requests})
         else:
             return redirect('login')
+        
+class PersonalInformationView(CreateView):
+    template_name = 'settings/settings.html'
+    
+    def get(self, request: HttpRequest):
+        if request.user.is_authenticated:
+            profile = request.user.profile
+            avatar = Avatar.objects.filter(profile = profile, active = True, shown = True).first()       
+            
+            return render(
+                request,
+                template_name= self.template_name, 
+                context= {
+                    'username': request.user.email,
+                    'first_name': request.user.first_name,
+                    'last_name': request.user.last_name,
+                    'avatar': avatar,
+                    'form': PersonalInformationForm
+                }
+            )
+    
+    def post(self, request: HttpRequest):
+        form = PersonalInformationForm(request.POST)
+        
+        if form.is_valid():
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            date_of_birth = form.cleaned_data['date_of_birth']
+            username = form.cleaned_data['username']
+            
+            user_profile = request.user.profile
+            
+            user_profile.date_of_birth = date_of_birth
+            user_profile.first_name = first_name
+            user_profile.last_name = last_name
+            user_profile.username = username
+            user_profile.save()
+            
+            return redirect('settings')
+        
+        return render(request, self.template_name, {'form': form})
+
+
 

@@ -1,4 +1,4 @@
-.overlay {
+#overlay.active {
     position: fixed;
     top: 0;
     left: 0;
@@ -8,11 +8,16 @@
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 2000;
     
-    display: none;
+    display: flex;
     justify-content: center;
     align-items: center;
     padding: 2rem;
 }
+
+#overlay {
+    display: none;
+}
+
 
 .account-info{
     display: flex;
@@ -26,17 +31,21 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.35rem;
 
     width: 100%;
 }
 
 .names h3{
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     font-weight: 600;
     margin: 5px 0;
 }
 
+.username{
+    font-size: 1.2rem;
+
+}
 .basic-acc-info{
     display: flex;
     flex-direction: row;
@@ -87,7 +96,7 @@
     flex-wrap: wrap;
 }
 
-.tags p{
+.add-basic-tag{
     display: flex;
     flex-direction: row;
     justify-content: start;
@@ -102,12 +111,15 @@
     height: 1.75rem;
     text-align: center;
     margin-right: calc(10px - 0.5rem);
+    font-size: medium;
 }
 
-.center-div {
+
+
+.center-div.active{
     background-color: white;
     border: 1px solid rgba(205, 206, 210, 1);
-    border-radius: 0.625rem;
+    border-radius: 0.9rem;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     
     width: 100%;
@@ -120,6 +132,10 @@
     gap: 1.5rem;
 }
 
+.center-div {
+    display: none;
+}
+
 .create-post-text {
     font-size: 2rem;
     font-weight: 600;
@@ -127,11 +143,16 @@
     margin-bottom: 0.5rem;
 }
 
-.form-create-post {
+
+#post-form.active {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+}
+
+#post-form {
+    display: none;
 }
 
 .data-details {
@@ -231,10 +252,7 @@ input:focus {
     background: none;
     border: none;
 }
-.upload-label img {
-    width: 100px; 
-    height: auto;
-}
+
 .upload-input {
     display: none;
 }
@@ -242,6 +260,27 @@ input:focus {
 .control-buttons{
     display: flex;
     flex-direction: row;
+    justify-content: right;
+    align-items: center;
+    width: 100%;
+}
+
+/* .upload-label { */
+    /* font-size: 1.2rem; */
+/* } */
+
+.upload-img{
+    width: 50px;
+    height: fit-content;
+    /* border-radius: 0.625rem; */
+    object-fit: cover;
+    /* border: 1.5px solid rgba(205, 206, 210, 1); */
+}
+
+.stickers-button{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
 }
 
 .add-tag, .add-url{
@@ -326,4 +365,58 @@ input:focus {
     font-size: 1.2rem;
     font-weight: 500;
     color: rgba(129, 129, 141, 1);
+}
+
+.default-avatar{
+    width: 96px;
+    height: 96px;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar-requests{
+    display: none;
+}
+
+
+.control-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    width: 100%;
+    /* margin-top: 1rem; */
+}
+
+.upload-label {
+    cursor: pointer;
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.upload-img {
+    width: 2.6rem;
+    height: 2.6rem;
+    object-fit: contain;
+}
+
+/*  */
+.post-header-popup{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.close-popup{
+    color: rgba(7, 10, 28, 1);
+    font-size: 1.5rem;
+    text-decoration: none;
+    cursor: pointer;
 }

@@ -50,7 +50,7 @@ html {
 }
 
 .sidebar-profile {
-    width: 25vw;
+    width: 20vw;
     height: auto;
 
     background-color: white;
@@ -61,7 +61,8 @@ html {
 }
 
 .sidebar-requests {
-    width: 25vw;
+    width: 20vw;
+    min-width: 20vw;
     height: auto;
 
     background-color: white;
@@ -69,19 +70,6 @@ html {
 
     border: 0.5px solid rgba(205, 206, 210, 1);
     border-radius: 0.625rem;
-}
-
-.sidebar-messages {
-    width: 25vw;
-    height: auto;
-
-    background-color: white;
-    padding: 1.5rem;
-
-    border: 0.5px solid rgba(205, 206, 210, 1);
-    border-radius: 0.625rem;
-
-    overflow-y: auto;
 }
 
 
@@ -92,6 +80,7 @@ html {
     border: 0.5px solid rgba(205, 206, 210, 1);
     border-radius: 0.625rem;
     background-color: white;
+    overflow-y: auto;
 }
 
 .scrollbar-block{
@@ -103,8 +92,8 @@ html {
     gap: 0.3rem;
     
     width: 75vw;
-    overflow-y: auto;
-    margin-left: calc(25vw + 0.3rem);
+    height: auto;
+    margin-left: calc(20vw + 0.3rem);
 }
 
 .text-area {

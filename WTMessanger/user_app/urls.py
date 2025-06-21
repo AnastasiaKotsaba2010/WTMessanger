@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import RegistrationView, LoginUserView, UserLogoutView, MainFriendsView, AllFriendsView, RecommendedFriendsView, FriendshipRequestView
+from .views import RegistrationView, LoginUserView, UserLogoutView, MainFriendsView, AllFriendsView, RecommendedFriendsView, FriendshipRequestView, PersonalInformationView
 
 
 urlpatterns = [
@@ -46,5 +46,12 @@ urlpatterns = [
         FriendshipRequestView.as_view(), 
         name = 'friendship_requests'
     ),
+    
+    # 
+    path(
+        'settings/',
+        PersonalInformationView.as_view(), 
+        name = 'personal_information'
+    )
     
 ]

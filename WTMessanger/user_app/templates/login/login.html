@@ -14,10 +14,10 @@
         <form class="form-login" method="post">
             {% csrf_token %}
             <div class="links-div">
-                <a href="/user/register" class="tab">Рєєстрація</a>
-                <a href="/user/login" class="tab active">Авторизація</a>
+                <a href="{% url 'register' %}" class="tab">Рєєстрація</a>
+                <a href="{% url 'login' %}" class="tab active">Авторизація</a>
             </div>
-            
+
             <p class="join-text">Раді тебе знову бачити!</p>
             <div class = "data-login">
                 <div class="center-data noimg">

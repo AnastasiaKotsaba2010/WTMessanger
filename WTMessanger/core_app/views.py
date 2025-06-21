@@ -1,45 +1,76 @@
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import UserDetailsForm
-
-
-# from user_app.models import WTUser
-# from django.views.generic.edit import CreateView
-# from .forms import WTUserProfileForm, PersonalInformationForm
-# from .models import WtUser_Profile, ProfileCard
-# from django.urls import reverse_lazy
-# # from post_app.models import WTUserPost
-# from django.views.generic.edit import FormView
+from django.contrib.auth.models import User
+from user_app.models import Avatar
 
 # # Create your views here.
 class CoreView(LoginRequiredMixin ,TemplateView):
     template_name = "core/core.html"
     login_url = 'register' 
     
-    def get(self, request: HttpRequest):        
+    def get(self, request: HttpRequest): 
+        profile = request.user.profile
+        global avatar
+        avatar = Avatar.objects.filter(profile = profile, active = True, shown = True).first()       
         
         if request.user.is_authenticated and request.session.get('show_detail_form', False):
+            print('show detail form')
             return render(
                 request, 
                 self.template_name, 
                 context= {
                     'form_details': UserDetailsForm(), 
-                    'show_detail_form': True
+                    'show_detail_form': True,
+                    'username': request.user.email,
+                    'first_name': request.user.first_name,
+                    'last_name': request.user.last_name,
+                    'avatar': avatar
                 })
+            
+        return render(request, self.template_name)
 
     def post(self, request: HttpRequest):
         # form = RegistrationForm(request.POST)
         button = request.POST.get('who_send')
         
         if button == 'continue':
+            print('continue')
             form = UserDetailsForm(request.POST)
             
             if form.is_valid():
-                first_name = form.cleaned_data['first_name']
-                last_name = form.cleaned_data['last_name']
-                name = form.cleaned_data['email']
+                name = form.cleaned_data['name']
+                
+                if User.objects.filter(username=name).exclude(pk=request.user.pk).exists():
+                    form.add_error('name', 'Користувач з таким ім’ям уже існує')
+                    return render(request, self.template_name, {
+                        'form_details': form,
+                        'show_detail_form': True
+                    })
+
+                request.user.first_name = form.cleaned_data['first_name']
+                request.user.last_name = form.cleaned_data['last_name']
+                request.user.email = name 
+                request.user.save()
+
+                request.session.pop('show_detail_form', None)
+
+                return redirect('core') 
+
+            return render(request, self.template_name, {
+                'form_details': form,
+                'show_detail_form': True,
+                'username': request.user.email,
+                'first_name': request.user.first_name,
+                'last_name': request.user.last_name,
+                'avatar': avatar
+            })
+            
+        else:
+            print('cancel')
+            return redirect('core')
     
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)

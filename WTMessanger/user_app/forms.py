@@ -44,5 +44,19 @@ class CodeVerificationForm(forms.Form):
                     'autocomplete': 'off'
                 })
             )
-
+            
+class PersonalInformationForm(forms.Form):
+    first_name = forms.CharField(
+        max_length= 255,
+        widget= forms.EmailInput(attrs={'class': 'data-input-img', 'placeholder': ''})
+    )
+    last_name = forms.CharField(
+        max_length= 255,
+        widget= forms.EmailInput(attrs={'class': 'data-input-img', 'placeholder': ''})
+    )
+    date_of_birth = forms.DateInput()
+    username = forms.EmailField(
+        max_length= 255, 
+        widget= forms.EmailInput(attrs={'class': 'data-input-img', 'placeholder': "you@example.com"})
+    )
 

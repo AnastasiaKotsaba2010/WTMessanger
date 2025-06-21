@@ -17,8 +17,8 @@
                     {% csrf_token %}
                     
                     <div class="links-div">
-                        <a href="/user/register" class="tab active">Рєєстрація</a>
-                        <a href="/user/login" class="tab">Авторизація</a>
+                        <a href="{% url 'register' %}" class="tab active">Рєєстрація</a>
+                        <a href="{% url 'login' %}" class="tab">Авторизація</a>
                     </div>
                     
                     <p class="join-text">Приєднуйся до World IT!</p>
@@ -90,40 +90,6 @@
             </form>
         </div>
     {% endif %}
-
-    {% if show_detail_form %}
-        <div class="overlay">
-            <div class="center-div">
-                <h3 class="add-details-text">Додай деталі про себе</h3>
-                <form class="form-profile-details" method="post" enctype="multipart/form-data" action="{% url 'details' %}">
-                    {% csrf_token %}
-
-                    <div class="data-details">
-                        <div class="center-data noimg">
-                            <p class="text-data">Ім’я</p>
-                            {{ form.first_name }}
-                        </div>
-
-                        <div class="center-data noimg">
-                            <p class="text-data">Прізвище</p>
-                            {{ form.last_name }}
-                        </div>
-
-                        <div class="center-data noimg">
-                            <p class="text-data">Ім’я користувача</p>
-                            {{ form.name }}
-                        </div>
-
-                    </div>
-                    <p class="help-text-1">Або оберіть: <span class="help-text-2">Запропоновані варіанти відповідно до Ім’я та Прізвища</span></p>
-                    <button class="continue-button" type="submit" value="continue" name="who_send">Продовжити</button>
-                </form>
-        
-            </div>
-        </div>
-    {% endif %}
-
-
 {% endblock %}
 
 

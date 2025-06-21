@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Settings Page {% endblock %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'css/settings/settings.css' %}">
+    <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
+{% endblock %}
+
+
+{% block sidebar %}
+    <div class="friends-links">
+        <a href="{% url 'personal_information' %}" class="friends-link {% if request.path == '/user_app/settings' %}active{% endif %}">
+            Особиста інформація
+        </a>
+        <a href="{% url 'friendship_requests' %}" class="friends-link {% if request.path == '/user_app/friends/requests/' %}active{% endif %}">
+            Альбоми
+        </a>
+    </div>
+{% endblock %}
+
+{% block scrollbar %}
+    <div class="center-div">
+        <form class="user-personal-info-form" method="post">
+            {% csrf_token %}
+            <h2 class="main-confirm">Картка профілю</h2>
+            
+            <div class = "data-reg">
+                <div class="center-data noimg">
+                    <p class="text-data">Ім'я</p>
+                    {{ form.first_name }}
+                </div>
+                <div class="center-data">
+                    <p class="text-data">Прізвище</p>
+                    {{ form.last_name }}
+                    <!-- <div class="input-eye">
+                        {{ form.password }}
+                        <img src="{% static 'images/closed_eye.svg' %}" alt="" class="eye-img" id="eye-icon" >
+                    </div> -->
+                </div>
+                
+                <div class="center-data">
+                    <p class="text-data">Дата народження</p>
+                    {{ form.date_of_birth }}
+                </div>
+
+                <div class="center-data">
+                    <p class="text-data">Електронна адреса</p>
+                    {{ form.username }}
+                </div>
+            </div>
+            
+            <!-- <button name="who_send" value="verification" class="create-button">Підтвердити</button> -->
+            <!-- <a href="{% url 'register' %}" class="back-link">Назад</a> -->
+        </form>
+    </div>
+{% endblock %}

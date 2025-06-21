@@ -1,21 +1,17 @@
 from django.db import models
 from user_app.models import Profile
-WtUser_Profile = Profile
+
+
 class Post(models.Model):
-    author = models.ForeignKey(WtUser_Profile, on_delete=models.CASCADE)
-    
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     
     topic = models.CharField(max_length=200) # нове поле
     
     content = models.TextField(max_length=4096)
-    
     images = models.ManyToManyField('Image', blank=True, related_name='posts_authored')
-    
-    views = models.ManyToManyField(WtUser_Profile, blank=True, related_name='posts_viewed')
-    
-    likes = models.ManyToManyField(WtUser_Profile, blank=True, related_name='posts_liked')
-    
+    views = models.ManyToManyField(Profile, blank=True, related_name='posts_viewed')
+    likes = models.ManyToManyField(Profile, blank=True, related_name='posts_liked')
     tags = models.ManyToManyField('Tag', blank=True)
 
     def str(self):

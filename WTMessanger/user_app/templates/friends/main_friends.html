@@ -19,12 +19,98 @@
         <a href="{% url 'recommended_friends' %}" class="friends-link {% if request.path == '/user_app/friends/recommended/' %}active{% endif %}">
             Рекомендації
         </a>
-        <a href="{% url 'all_friends' %}" class="friends-link {% if request.path == '/user_app/friends/all' %}active{% endif %}">
+        <a href="{% url 'all_friends' %}" class="friends-link {% if request.path == '/user_app/friends/all/' %}active{% endif %}">
             Всі друзі
         </a>
     </div>
 {% endblock %}
 
 {% block scrollbar %}
-    
+    <section class="content">
+        <div class="block">
+            <div class="block-header">
+                <p>Запити</p>
+                <a class="view-all" href="requests.html">Дивитись всі</a>
+            </div>
+
+            <div class="card-grid">
+                <div class="user-card">
+                    <div class="avatar"></div>
+                    <div class="name">Yehor Aung</div>
+                    <div class="tag">@theliii</div>
+                    <div class="actions">
+                        <button class="primary">Підтвердити</button>
+                        <button class="secondary">Видалити</button>
+                </div>
+                </div>
+
+                <div class="user-card">
+                    <div class="avatar red"></div>
+                    <div class="name">Ann Ann</div>
+                    <div class="tag">@theliii</div>
+                    <div class="actions">
+                        <button class="primary">Підтвердити</button>
+                        <button class="secondary">Видалити</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="block">
+            <div class="block-header">
+                <p>Рекомендації</p>
+                <a class="view-all" href="recomendations.html">Дивитись всі</a>
+            </div>
+
+            <div class="card-grid">
+                <div class="user-card">
+                    <div class="avatar"></div>
+                    <div class="name">Yehor Aung</div>
+                    <div class="tag">@theliii</div>
+                    <div class="actions">
+                        <button class="primary">Додати</button>
+                        <button class="secondary">Видалити</button>
+                </div>
+            </div>
+                <div class="user-card">
+                    <div class="avatar red"></div>
+                    <div class="name">Ann Ann</div>
+                    <div class="tag">@theliii</div>
+                    <div class="actions">
+                        <button class="primary">Додати</button>
+                        <button class="secondary">Видалити</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="block">
+            <div class="block-header">
+                <p>Всі друзі</p>
+                <a class="view-all" href="all_friends.html">Дивитись всі</a>
+            </div>
+
+            <div class="card-grid">
+                <div class="user-card">
+                    <div class="avatar"></div>
+                    <div class="name">Yehor Aung</div>
+                    <div class="tag">@theliii</div>
+                    <div class="actions">
+                        <button class="primary">Повідомлення</button>
+                        <button class="secondary">Видалити</button>
+                </div>
+                </div>
+
+                <div class="user-card">
+                    <div class="avatar red"></div>
+                    <div class="name">Ann Ann</div>
+                    <div class="tag">@theliii</div>
+                    <div class="actions">
+                        <button class="primary">Повідомлення</button>
+                        <button class="secondary">Видалити</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

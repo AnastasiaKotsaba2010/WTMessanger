@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}{% endblock title %}</title>
-        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+        <link rel="stylesheet" href="{% static 'css/bases.css' %}">
         <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
 
         {% block links %}
@@ -23,11 +23,17 @@
                             <img src="{% static 'images/home.svg' %}" alt="home">Головна
                         </a>
         
-                        <a href="#" class="page-link {% if request.path == '/create/post/' %}active{% endif %}">
+                        <a href="{% url 'create_post' %}" class="page-link {% if request.path == '/create/post/' %}active{% endif %}">
                             <img src="{% static 'images/gallery.svg' %}" alt="gallery">Мої публікації
                         </a>
         
-                        <a href="{% url 'main_friends' %}" class="page-link {% if request.path == '/user_app/friends/main/' %}active{% endif %}"> 
+                        <a href="{% url 'main_friends' %}" class="page-link 
+                        {% if request.path == '/user_app/friends/main/' %} active
+                        {% elif request.path == '/user_app/friends/requests/' %} active
+                        {% elif request.path == '/user_app/friends/recommended/' %} active
+                        {% elif request.path == '/user_app/friends/all/' %} active
+                        {% endif %}"> 
+
                             <img src="{% static 'images/people.svg' %}" alt="friends">Друзі
                         </a>
         
@@ -35,7 +41,7 @@
                             <img src="{% static 'images/chat.svg' %}" alt="chat">Чати
                         </a>
         
-                        <a href="#" class="page-link {% if request.path == '/settings/' %}active{% endif %} "> 
+                        <a href="{% url 'personal_information' %}" class="page-link {% if request.path == '/user_app/settings/' %}active{% endif %} "> 
                             <img src="{% static 'images/settings.svg' %}" alt="settings">Налаштування
                         </a>
                     </nav>
@@ -75,18 +81,12 @@
                         {% endblock %}
                     </div>
                     
-                    <div class="sidebar-messages">
-                        {% block messages %}
-                            
-                        {% endblock %}
-                    </div>
-
                 </div>
 
                 <div class="scrollbar-block">
                     <div class="text-block">
                         <div class="textarea-wrapper">
-                            <textarea name="" id="" class="text-area" placeholder="Текст публікації"></textarea>
+                            <textarea name="" id="post-text-area" class="text-area" placeholder="Текст публікації"></textarea>
     
                             <div class="design-btns">
                                 <button class="stickers"><img src="{% static 'images/stickers.svg' %}" alt="stickers"></button>
