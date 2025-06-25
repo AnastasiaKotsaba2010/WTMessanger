@@ -1,5 +1,7 @@
 from django.db import models
 from user_app.models import Profile
+from django.urls import reverse
+
 
 
 # Create your models here.
@@ -13,8 +15,13 @@ class ChatGroup(models.Model):
     def str(self):
         return f'Група {self.name} '
     
+    def get_absolute_url(self):
+        return reverse("chat", kwargs = {"group_id": self.pk})
+    
+    
 
 class ChatMessage(models.Model):
+    
     content = models.TextField(max_length=4096)
     author = models.ForeignKey(Profile, on_delete=models.CASCADE)
     chat_group = models.ForeignKey(ChatGroup, on_delete=models.CASCADE)

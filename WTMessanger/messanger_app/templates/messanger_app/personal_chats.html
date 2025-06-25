@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %} Post Page {% endblock %}
-
 {% block links %}
-    <link rel="stylesheet" href="{% static 'css/chat/chat.css' %}">
+    <link rel="stylesheet" href="{% static 'css/chat/chat_style.css' %}">
     <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
 {% endblock %}
+
+{% block title %} Post Page {% endblock %}
 
 {% block sidebar %}
     <button class="creat-group-chat"><img src="{% static 'images/add-btn-plus.svg' %}" alt="add-btn-plus">Створити груповий чат</button>
@@ -17,64 +17,29 @@
         <img src="{% static 'images/people-contacts.svg' %}" alt="people">
         <p class="txt-contacts">Контакти</p>
     </div>
-
     <input type="text" name="search" class="search" placeholder="Пошук">
-
     <div class="contacts-profiles">
-        {% for user in list_chats %}
-            <a href="{% url 'create_personal_chat' user.pk %}">
-                <div class="friends">
-                    {% if user.profile.avatar %}
-                        <div class="avatar" style="background-image: url('{{ user.profile.avatar.url }}')"></div>
-                    {% else %}
-                        <div class="avatar"></div>
-                    {% endif %}
-                    <span>{{ user.first_name }} {{ user.last_name }}</span>
-                </div>
-            </a>
-        {% endfor %}
+        <a href="">
+            <div class="friends">
+                <div class="avatar"></div>
+                <span>Jane Cooper</span>
+            </div>
+        </a>
     </div>
 {% endblock %}
-
 
 {% block scrollbar %}
     <div class="messages-chats">
         <div class="no-messages-yet">
             <h4>Почніть нове спілкування</h4>
+
             <p class="text-start">Оберіть контакт зі списку ліворуч або створіть групу, щоб почати спілкування</p>
-        </div>
-<!-- 
-        <div class="additional">
-            <h1>Group {{ chat_group }}</h1>
-            <input id="groupId" type="hidden" value="{{ chat_group.id }}">
-        
-            <form id = "messageForm" >
-                {{ form_chat.as_p }}
-                <button>Надіслати</button>
-            </form>
-        </div> -->
-        
-        <div id = "messages-from-user">
-                <!-- Проходимось по кожному повідомленню у списку повідомлень -->
-                {% for message in messages %}
-                    <!-- Виводимо автора, текст повідомлення та час -->
-                    {% if message.author.profile.avatar %}
-                        <img src="{{ message.author.profile.avatar.url }}" alt="" style="width: 50px;">
-                    {% else %}
-                        <img src="{% static 'chat_app/img/default_avatar.png' %}" alt="" style="width: 50px;">
-                    {% endif %}
-                    
-                    <p>{{ message.author.user.first_name }}: {{ message.content }} (<span class = "message-time">{{ message.date_time.isoformat }}</span>)</p>
-                    <i>Переглядів: {{ message.views.count }}</i>
-                    <hr>
-                    <br>
-                {% endfor %}
         </div>
     </div>
 
-
     <div class="chat-info">
         <div class="messages">
+
             <div class="chat-info-header-div">
                 <div class="message-div">
                     <img src="{% static 'images/chat-contacts.svg' %}" alt="people">
@@ -108,8 +73,4 @@
 
         </div>
     </div>
-{% endblock %}
-
-{% block sctipts %}
-    <script defer src="{% static 'messanger_app/js/chat.js' %}"></script>
 {% endblock %}

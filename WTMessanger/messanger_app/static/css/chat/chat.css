@@ -60,6 +60,10 @@ a{
     height: calc(100vh - 10%);
 
     scrollbar-width: none;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .contacts-profiles::-webkit-scrollbar {
@@ -102,6 +106,11 @@ a{
     width: 65%;
     height: 100%;    
     gap: 0.3rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
 }
 
@@ -171,6 +180,22 @@ a{
 }
 
 
+/* middle div message */
+.no-messages-yet{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+
+    font-size: 1rem;
+    gap: 1rem;
+    width: 50%;
+}
+
+.no-messages-yet p{
+    font-size: 0.7rem;
+    font-weight: 500;
+}
 
 
 
