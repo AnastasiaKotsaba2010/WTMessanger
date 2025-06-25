@@ -4,8 +4,10 @@
 {% block title %} Post Page {% endblock %}
 
 {% block links %}
-    <link rel="stylesheet" href="{% static 'css/post_style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/post.css' %}">
     <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
+    <script src="//code.jquery.com/jquery-1.10.1.min.js"></script>
+
 {% endblock %}
     
 {% block sidebar %}
@@ -24,22 +26,23 @@
         </div>
 
         <div class="basic-acc-info">
-            <div class="acc-info">
+            <div class="acc-info posts">
                 <h4 class="txt-amount">0</h4>
                 <p class="txt-under">Дописи</p>
             </div>
             
-            <div class="acc-info" id="1">
+            <div class="acc-info readers">
                 <h4 class="txt-amount">0</h4>
                 <p class="txt-under">Читачі</p>
             </div>
-            <div class="acc-info">
+            <div class="acc-info friends">
                 <h4 class="txt-amount">0</h4>  
                 <p class="txt-under">Друзі</p>
             </div>
         </div>
     </div>
 {% endblock %}
+
 
 {% block scrollbar %}
     <div class="overlay" id="overlay">
@@ -91,14 +94,17 @@
                         <p class="text-data">Посилання</p>
                         
                         <div class="url-input-wrapper" id="links-wrapper">
-                            <input type="url" name="links" class="form-control" placeholder="Введіть посилання">
+                            <div class="link-btn-wrapper">
+                                <input type="url" name="links" class="form-control" placeholder="Введіть посилання">
 
-                            <button class="add-url" type="button" id="add-link-button">
-                                <img src="{% static 'images/plus.svg' %}" alt="Додати посилання">
-                            </button>
+                                <button class="add-url" type="button" id="add-link-button">
+                                    <img src="{% static 'images/plus.svg' %}" alt="Додати посилання">
+                                </button>
+                            </div>
                         </div>
-
                     </div>
+
+                    <div class="image-preview-wrapper" id="preview-img-wrapper"></div>
 
                     <div class="center-data noimg" style="display:none;">
                         {{ form.images }}
@@ -110,10 +116,10 @@
                         <img src="{% static 'images/image-button.svg' %}" alt="Додати картинку" class="upload-img">
                     </label>
                     
-                    <input type="file" id="image-upload" name="image-upload" accept="image/*" style="display:none;" multiple>
+                    <input type="file" id="image-upload" name="images" accept="image/*" style="display:none;" multiple>
 
                     <button class="stickers-button" type="button"><img src="{% static 'images/stickers-button.svg' %}" alt="stickers"></button>
-                    <button class="post-button" type="submit">Публікація <img src="{% static 'images/plane.svg' %}" alt="літак"></button>            </div>
+                    <button class="post-button" type="submit" name="post_button" value="post">Публікація <img src="{% static 'images/plane.svg' %}" alt="літак"></button>            
                 </div>
             </form>
 
@@ -123,50 +129,84 @@
                 </div>
             {% endif %}
         </div>
-    </div>
-
-    <div class="posts">
-        {% for post in  posts %}
+    </div>      
+       
+    {% for post in posts %}
+        <div class="posts">
             <div class="post-header">
                 <div class="post-header-info">
-                    <img src="{% static 'images/.svg' %}" alt="avatar">
-                    <h2>{{ post.author }}</h2>
+                    {% if avatar %}
+                        <img src="{{ avatar.image.url }}" alt="" class="default-avatar-post">
+                    {% else %}
+                        <img src="{% static 'images/default_avatar.png' %}" alt="" class="default-avatar-post">
+                    {% endif %}
+                    <p>{{ user.first_name }} {{  user.last_name }}</p>
                 </div>
     
                 <div class="user-signature">
                     <img src="{% static 'images/signature.svg' %}" alt="signature">
-                </div>
-            </div>
+                    <button id="edit-post" class="edit-post-btn">
+                        <img src="{% static 'images/3_dots.svg' %}" alt="signature">
+                    </button>
 
-            <div class="post-images">
-                {% if post.image %}
-                    <img src="{{ post.image.url }}" alt="Post Image" class="post-image">
-                {% endif %}
+                    <div class="edit-post-control-btns">
+                        <form method="post" id="edit-form" class="edit-form">
+                            {% csrf_token %}
+                            <button type="submit" class="edit-post-btn">
+                                <img src="{% static 'images/bin.svg' %}" alt="signature">
+                                Видалити публікацію
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+
             </div>
 
             <div class="post-content">
-                <p>{{ post.topic }}</p>
-                <p>{{ post.content }}</p>
+                <p class="topic-post">{{ post.topic }}</p>
+
+                {% if post.content %}
+                    <p class="post-text-content">{{ post.content }}</p>
+                {% endif %}
+
+                <div class="post-tags">
+                    {% for tag in post.tags.all %}
+                        <span class="post-tag">#{{ tag.name }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="post-links">
+                    {% for link in post.link_set.all %}
+                        <a href="{{ link.url }}" class="post-link" >{{ link.url }}</a>
+                    {% endfor %}
+                </div>
+
+                <div class="post-images">
+                    {% for image in post.images.all %}
+                        <img src="{{ image.file.url }}" alt="{{ image.filename }}" class="post-image">
+                    {% endfor %}
+                </div>
             </div>
 
             <div class="post-likes">
-
                 <div class="wrapper-like">
-                    <img src="{% static 'images/like.svg' %}" alt="">
-                    <p>0 Вподобань</p>
+                    <button type="button" class="like-post" id="like-post">
+                        <img src="{% static 'images/like.svg' %}" alt="">
+                    </button>
+                    <p id="likes-amount">0 Вподобань</p>
                 </div>
 
                 <div class="wrapper-like">
                     <img src="{% static 'images/eye.svg' %}" alt="">
                     <p>0 Переглядів</p>
                 </div>
-
             </div>
-
-        {% endfor %}
-    </div>
+        </div>
+    {% endfor %}
 {% endblock %}
 
 {% block scripts %}
     <script src="{% static 'js/posts.js' %}"></script>
+    <!-- <script src="{% static 'js/delete_post.js' %}"></script> -->
 {% endblock %}

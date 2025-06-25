@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Post Page {% endblock %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'css/chat/chat_style.css' %}">
+    <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
+{% endblock %}
+
+{% block sidebar %}
+    <button class="creat-group-chat"><img src="{% static 'images/add-btn-plus.svg' %}" alt="add-btn-plus">Створити груповий чат</button>
+{% endblock %}
+
+{% block requests %}
+    <div class="contacts">
+        <img src="{% static 'images/people-contacts.svg' %}" alt="people">
+        <p class="txt-contacts">Контакти</p>
+    </div>
+
+    <input type="text" name="search" class="search" placeholder="Пошук">
+
+    <div class="contacts-profiles">
+        <a href="">
+            <div class="friends">
+                <div class="avatar"></div>
+                <span>Jane Cooper</span>
+            </div>
+        </a>
+    </div>
+{% endblock %}
+
+
+{% block scrollbar %}
+    <div class="messages-chats"></div>
+
+    <div class="chat-info">
+        <div class="messages">
+
+            <div class="chat-info-header-div">
+                <div class="message-div">
+                    <img src="{% static 'images/chat-contacts.svg' %}" alt="people">
+                    <p class="text">Повідомлення</p>
+                </div>
+
+                <button class="view-all" type="button">Дивитись всі</button>
+            </div>
+        </div>
+
+        <div class="group-chats">
+
+            <div class="chat-info-header-div">
+                <div class="message-div">
+                    <img src="{% static 'images/chat-contacts.svg' %}" alt="people">
+                    <p class="text">Групові чати</p>
+                </div>
+
+                <button class="view-all" type="button">Дивитись всі</button>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'GT Walsheim Pro', sans-serif;
+    font-family: 'Nunito', sans-serif;
 }
 
 body {
@@ -36,9 +36,13 @@ html {
     justify-content: space-between;
     align-items: left;
 
-    height: 100vh;
+    height: 95vh;
     width: 100vw;
-    padding: 2rem 5rem;
+
+    max-width: 100vw;
+    max-height: 95vh;
+
+    padding: 1rem 5rem;
     background-color: rgba(250, 248, 255, 1);
 }
 .sidebar {
@@ -74,13 +78,19 @@ html {
 
 
 .scrollbar{
-    padding: 2rem;
+    /* padding: 1.5rem; */
     width: 100%;
     
     border: 0.5px solid rgba(205, 206, 210, 1);
     border-radius: 0.625rem;
     background-color: white;
-    overflow-y: auto;
+    overflow-y: scroll;
+    
+    scrollbar-width: none;
+}
+
+.scrollbar::-webkit-scrollbar {
+    display: none; 
 }
 
 .scrollbar-block{
@@ -133,8 +143,9 @@ header{
     /* background-color: rgb(218, 99, 99); */
     background-color: white;
 
-    padding: 1.5rem 6.5rem;
+    padding: 1rem 5rem;
     font-size: 10rem;
+    /* width: 100%; */
 }
 
 .div-header-not-authenticated{

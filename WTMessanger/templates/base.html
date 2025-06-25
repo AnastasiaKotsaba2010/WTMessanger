@@ -37,7 +37,7 @@
                             <img src="{% static 'images/people.svg' %}" alt="friends">Друзі
                         </a>
         
-                        <a href="#" class="page-link {% if request.path == '/chats/' %}active{% endif %}"> 
+                    <a href="{% url 'chat' %}" class="page-link {% if request.path == '/chat/personal_chat/' %}active{% endif %}"> 
                             <img src="{% static 'images/chat.svg' %}" alt="chat">Чати
                         </a>
         
@@ -80,7 +80,6 @@
                             
                         {% endblock %}
                     </div>
-                    
                 </div>
 
                 <div class="scrollbar-block">

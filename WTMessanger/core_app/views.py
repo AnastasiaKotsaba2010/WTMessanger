@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect
 from .forms import UserDetailsForm
 from django.contrib.auth.models import User
 from user_app.models import Avatar
+from post_app.models import Post
+from post_app.forms import PostForm
 
 # # Create your views here.
 class CoreView(LoginRequiredMixin ,TemplateView):
@@ -14,8 +16,10 @@ class CoreView(LoginRequiredMixin ,TemplateView):
     def get(self, request: HttpRequest): 
         profile = request.user.profile
         global avatar
-        avatar = Avatar.objects.filter(profile = profile, active = True, shown = True).first()       
+        avatar = Avatar.objects.filter(profile = profile, active = True, shown = True).first()  
         
+        all_posts = Post.objects.all().order_by('-id')
+     
         if request.user.is_authenticated and request.session.get('show_detail_form', False):
             print('show detail form')
             return render(
@@ -23,17 +27,26 @@ class CoreView(LoginRequiredMixin ,TemplateView):
                 self.template_name, 
                 context= {
                     'form_details': UserDetailsForm(), 
+                    'form_post': PostForm(),
                     'show_detail_form': True,
                     'username': request.user.email,
                     'first_name': request.user.first_name,
                     'last_name': request.user.last_name,
-                    'avatar': avatar
+                    'avatar': avatar,
+                    'posts': all_posts
                 })
             
-        return render(request, self.template_name)
+        return render(request, self.template_name, {
+            'form_post': PostForm(),
+            'posts': Post.objects.all(),
+            'avatar': avatar,
+            'username': request.user.email,
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name,
+        })
 
     def post(self, request: HttpRequest):
-        # form = RegistrationForm(request.POST)
+        
         button = request.POST.get('who_send')
         
         if button == 'continue':
@@ -68,9 +81,42 @@ class CoreView(LoginRequiredMixin ,TemplateView):
                 'avatar': avatar
             })
             
-        else:
-            print('cancel')
-            return redirect('core')
+        if button == 'post':
+            print('post')
+            form_post = PostForm(request.POST, request.FILES)
+            
+            if form_post.is_valid():
+                post = form_post.save(commit = False)
+                post.author = request.user.profile
+                post.save()
+                
+                tags = form_post.cleaned_data.get('tags')
+                if tags:
+                    post.tags.set(tags)
+
+                images = form_post.cleaned_data.get('images')
+                if images:
+                    post.images.set(images)
+                    
+                print('form is valid')
+                all_posts = Post.objects.all().order_by('-id')
+
+                return render(request=request ,template_name= self.template_name, context={'posts': all_posts})
+            
+            all_posts = Post.objects.all().order_by('-id')
+
+            print(form_post.errors)
+            print('form is INvalid')
+            return render(request, self.template_name, {
+                'form_post': form_post,
+                'username': request.user.email,
+                'first_name': request.user.first_name,
+                'last_name': request.user.last_name,
+                'posts': all_posts
+            })
+        # else:
+        #     print('cancel')
+        #     return redirect('core')
     
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
