@@ -4,7 +4,7 @@
 {% block title %} Home Page {% endblock %}
 
 {% block links %}
-    <link rel="stylesheet" href="{% static 'css/cores.css' %}">
+    <link rel="stylesheet" href="{% static 'css/core.css' %}">
     <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
 {% endblock %}
 
@@ -159,68 +159,75 @@
             </div>
         </div>      
         
-        {% for post in posts %}
-            <div class="posts">
-                <div class="post-header">
-                    <div class="post-header-info">
-                        {% if avatar %}
-                            <img src="{{ avatar.image.url }}" alt="" class="default-avatar-post">
-                        {% else %}
-                            <img src="{% static 'images/default_avatar.png' %}" alt="" class="default-avatar-post">
+        {% if posts %}
+            {% for post in posts %}
+                <div class="posts">
+                    <div class="post-header">
+                        <div class="post-header-info">
+                            {% if avatar %}
+                                <img src="{{ avatar.image.url }}" alt="" class="default-avatar-post">
+                            {% else %}
+                                <img src="{% static 'images/default_avatar.png' %}" alt="" class="default-avatar-post">
+                            {% endif %}
+                            <p>{{ post.author.user.first_name }} {{ post.author.user.last_name }}</p>
+                        </div>
+            
+                        <div class="user-signature">
+                            <img src="{% static 'images/signature.svg' %}" alt="signature">
+                            <button id="edit-post" class="edit-post-btn">
+                                <img src="{% static 'images/3_dots.svg' %}" alt="signature">
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="post-content">
+                        <p class="topic-post">{{ post.topic }}</p>
+
+                        {% if post.content %}
+                            <p>{{ post.content }}</p>
                         {% endif %}
-                        <p>{{ post.author.user.first_name }} {{ post.author.user.last_name }}</p>
+
+                        <div class="post-tags">
+                            {% for tag in post.tags.all %}
+                                <span class="post-tag">#{{ tag.name }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="post-links">
+                            {% for link in post.link_set.all %}
+                                <a href="{{ link.url }}" class="post-link" target="_blank">{{ link.url }}</a>
+                            {% endfor %}
+                        </div>
+
+                        <div class="post-images">
+                            {% for image in post.images.all %}
+                                <img src="{{ image.file.url }}" alt="{{ image.filename }}" class="post-image">
+                            {% endfor %}
+                        </div>
                     </div>
+
+                    <div class="post-likes">
+                        <div class="wrapper-like">
+                            <button type="button" class="like-post" id="like-post">
+                                <img src="{% static 'images/like.svg' %}" alt="">
+                            </button>
+                            <p id="likes-amount">0 Вподобань</p>
+                        </div>
+
+                        <div class="wrapper-like">
+                            <img src="{% static 'images/eye.svg' %}" alt="">
+                            <p>0 Переглядів</p>
+                        </div>
+                    </div>
+
+                </div>
+            {% endfor %}
+        {% else %}
+        <div class="no-posts-container">
+            <p class="no-posts">Поки що немає жодних постів...</p>
+        </div>
+        {% endif %}
         
-                    <div class="user-signature">
-                        <img src="{% static 'images/signature.svg' %}" alt="signature">
-                        <button id="edit-post" class="edit-post-btn">
-                            <img src="{% static 'images/3_dots.svg' %}" alt="signature">
-                        </button>
-                    </div>
-                </div>
-
-                <div class="post-content">
-                    <p class="topic-post">{{ post.topic }}</p>
-
-                    {% if post.content %}
-                        <p>{{ post.content }}</p>
-                    {% endif %}
-
-                    <div class="post-tags">
-                        {% for tag in post.tags.all %}
-                            <span class="post-tag">#{{ tag.name }}</span>
-                        {% endfor %}
-                    </div>
-
-                    <div class="post-links">
-                        {% for link in post.link_set.all %}
-                            <a href="{{ link.url }}" class="post-link" target="_blank">{{ link.url }}</a>
-                        {% endfor %}
-                    </div>
-
-                    <div class="post-images">
-                        {% for image in post.images.all %}
-                            <img src="{{ image.file.url }}" alt="{{ image.filename }}" class="post-image">
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <div class="post-likes">
-                    <div class="wrapper-like">
-                        <button type="button" class="like-post" id="like-post">
-                            <img src="{% static 'images/like.svg' %}" alt="">
-                        </button>
-                        <p id="likes-amount">0 Вподобань</p>
-                    </div>
-
-                    <div class="wrapper-like">
-                        <img src="{% static 'images/eye.svg' %}" alt="">
-                        <p>0 Переглядів</p>
-                    </div>
-                </div>
-
-            </div>
-        {% endfor %}
     {% endif %}
 {% endblock %}
     

@@ -108,8 +108,10 @@ class CreatePostView(LoginRequiredMixin, CreateView):
             #         'last_name': request.user.last_name,
             #     }
             # )
+            print(request.FILES) 
             
             return redirect('core')
+
 
         all_posts = Post.objects.filter(author= request.user.profile).order_by('-id')
         avatar = Avatar.objects.filter(profile= request.user.profile, active=True, shown=True).first()

@@ -131,82 +131,76 @@
         </div>
     </div>      
        
-    {% for post in posts %}
-        <div class="posts">
-            <div class="post-header">
-                <div class="post-header-info">
-                    {% if avatar %}
-                        <img src="{{ avatar.image.url }}" alt="" class="default-avatar-post">
-                    {% else %}
-                        <img src="{% static 'images/default_avatar.png' %}" alt="" class="default-avatar-post">
-                    {% endif %}
-                    <p>{{ user.first_name }} {{  user.last_name }}</p>
-                </div>
-    
-                <div class="user-signature">
-                    <img src="{% static 'images/signature.svg' %}" alt="signature">
-                    <button id="edit-post" class="edit-post-btn">
-                        <img src="{% static 'images/3_dots.svg' %}" alt="signature">
-                    </button>
-
-                    <div class="edit-post-control-btns">
-                        <form method="post" id="edit-form" class="edit-form">
-                            {% csrf_token %}
-                            <button type="submit" class="edit-post-btn">
-                                <img src="{% static 'images/bin.svg' %}" alt="signature">
-                                Видалити публікацію
-                            </button>
-                        </form>
+    {% if posts %}
+        {% for post in posts %}
+            <div class="posts">
+                <div class="post-header">
+                    <div class="post-header-info">
+                        {% if avatar %}
+                            <img src="{{ avatar.image.url }}" alt="" class="default-avatar-post">
+                        {% else %}
+                            <img src="{% static 'images/default_avatar.png' %}" alt="" class="default-avatar-post">
+                        {% endif %}
+                        <p>{{ user.first_name }} {{  user.last_name }}</p>
+                    </div>
+        
+                    <div class="user-signature">
+                        <img src="{% static 'images/signature.svg' %}" alt="signature">
+                        <button id="edit-post" class="edit-post-btn">
+                            <img src="{% static 'images/3_dots.svg' %}" alt="signature">
+                        </button>
                     </div>
                 </div>
 
+                <div class="post-content">
+                    <p class="topic-post">{{ post.topic }}</p>
 
-            </div>
+                    {% if post.content %}
+                        <p class="post-text-content">{{ post.content }}</p>
+                    {% endif %}
 
-            <div class="post-content">
-                <p class="topic-post">{{ post.topic }}</p>
+                    <div class="post-tags">
+                        {% for tag in post.tags.all %}
+                            <span class="post-tag">#{{ tag.name }}</span>
+                        {% endfor %}
+                    </div>
 
-                {% if post.content %}
-                    <p class="post-text-content">{{ post.content }}</p>
-                {% endif %}
+                    <div class="post-links">
+                        {% for link in post.link_set.all %}
+                            <a href="{{ link.url }}" class="post-link" >{{ link.url }}</a>
+                        {% endfor %}
+                    </div>
 
-                <div class="post-tags">
-                    {% for tag in post.tags.all %}
-                        <span class="post-tag">#{{ tag.name }}</span>
-                    {% endfor %}
+                    <div class="post-images">
+                        {% for image in post.images.all %}
+                            <img src="{{ image.file.url }}" alt="{{ image.filename }}" class="post-image">
+                        {% endfor %}
+                    </div>
                 </div>
 
-                <div class="post-links">
-                    {% for link in post.link_set.all %}
-                        <a href="{{ link.url }}" class="post-link" >{{ link.url }}</a>
-                    {% endfor %}
-                </div>
+                <div class="post-likes">
+                    <div class="wrapper-like">
+                        <button type="button" class="like-post" id="like-post">
+                            <img src="{% static 'images/like.svg' %}" alt="">
+                        </button>
+                        <p id="likes-amount">0 Вподобань</p>
+                    </div>
 
-                <div class="post-images">
-                    {% for image in post.images.all %}
-                        <img src="{{ image.file.url }}" alt="{{ image.filename }}" class="post-image">
-                    {% endfor %}
-                </div>
-            </div>
-
-            <div class="post-likes">
-                <div class="wrapper-like">
-                    <button type="button" class="like-post" id="like-post">
-                        <img src="{% static 'images/like.svg' %}" alt="">
-                    </button>
-                    <p id="likes-amount">0 Вподобань</p>
-                </div>
-
-                <div class="wrapper-like">
-                    <img src="{% static 'images/eye.svg' %}" alt="">
-                    <p>0 Переглядів</p>
+                    <div class="wrapper-like">
+                        <img src="{% static 'images/eye.svg' %}" alt="">
+                        <p>0 Переглядів</p>
+                    </div>
                 </div>
             </div>
+        {% endfor %}
+    {% else %}
+        <div class="no-posts-container">
+            <p class="no-posts">Поки що немає жодних постів...</p>
         </div>
-    {% endfor %}
+    {% endif %}
+    
 {% endblock %}
 
 {% block scripts %}
     <script src="{% static 'js/posts.js' %}"></script>
-    <!-- <script src="{% static 'js/delete_post.js' %}"></script> -->
 {% endblock %}
