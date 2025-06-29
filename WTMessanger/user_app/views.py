@@ -1,52 +1,54 @@
-from django.views.generic.edit import FormView, CreateView
+from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.core.mail import send_mail
 from django.shortcuts import redirect, render
-from django.contrib.auth import login
-from django.contrib import messages
 from django.views import View
 from .forms import RegistrationForm, CodeVerificationForm, LoginForm, PersonalInformationForm
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView
 from core_app.forms import UserDetailsForm
 from django.contrib.auth.models import User
-import random, string 
 from django.http import HttpRequest
 from .models import Profile, VerificationCode, Avatar
 import random
-# Create your views here.
 
-# if request.user.is_authenticated: <----
+# Функція генерації випадкового 6-значного коду для підтвердження електронної пошти
 def generate_verification_code():
     return ''.join(random.choices('0123456789', k=6))
     
-
+# Створюємо клас представлення RegistrationView для відображення сторінки реєстрації
 class RegistrationView(View):
-    template_name = 'registration/registration.html'
+    template_name = 'registration/registration.html' # Шлях до шаблону для відображення
 
+    # Коли користувач хоче отримати дані з серверу, відображаємо контексті дані - форму реєстрації
     def get(self, request):
         return render(request=request ,template_name= self.template_name, context={'form': RegistrationForm})
 
+    # Метод обробляє форму та логіку реєстрації, коли користувач реєструється
     def post(self, request: HttpRequest):
-        form = RegistrationForm(request.POST)
-        button = request.POST.get('who_send')
+        form = RegistrationForm(request.POST) # Ініціалізуємо форму з даними POST
+        button = request.POST.get('who_send') # Відслідковуємо, яка кнопка була натиснута
 
-        if button == 'register':
-            if form.is_valid():
+        if button == 'register': # Якщо була натиснута кнопка реєстрації
+            if form.is_valid(): # Перевіряємо коректність форми
+                
+                # Отримуємо введені дані з полів форми: ім'я, пароль та підтвердження паролю
                 username = form.cleaned_data['username']
                 password = form.cleaned_data['password']
                 password2 = form.cleaned_data['password2']
 
+                # У випадку, якщо паролі співпадають
                 if password == password2:
+                    # Створюємо нового користувача
                     user_profile = User.objects.create_user(
                         username= username,
                         password= password,
                         email= ''
                     )
+                    # # Тимчасово 'деактивуємо' користувача до підтвердження ел.пошти
                     user_profile.is_active = False 
 
-                    code = generate_verification_code()
-                    send_mail(
+                    code = generate_verification_code() # Генеруємо код підтвердження
+                    send_mail(  # Відправляємо код за вказаною електронною поштою
                         subject= 'Код Підтвердження',
                         message= f'Ваш код підтвердження: {code}',
                         recipient_list= [username],
@@ -54,49 +56,52 @@ class RegistrationView(View):
                         fail_silently= False,   
                     )
                     
+                    # Створюємо та записуємо в БД код
                     verification_code_form = VerificationCode.objects.create(
                         username = user_profile.username,
                         code= code
                     )
-                    print(code)
                 
-                    user_profile.save()
-                    self.request.session['username'] = username
+                    user_profile.save() # Зберігаємо користувача
+                    self.request.session['username'] = username # Зберігаємо логін у сесію
+                    # Повертаємо ел.пошту користувача, а також форму
                     return render(request=request ,template_name= self.template_name, context={'email': user_profile.username, 'form_code': CodeVerificationForm})
                 else:
-                    pass
-                    # user_profile.save()
+                    print('Form is invalid, try again')
+        # Якщо була натиснута кнопка для підтвердження ел.пошти
         elif button == 'verification':
             form_code = CodeVerificationForm(request.POST)
             
             if form_code.is_valid():
-                # username_code = form_code.cleaned_data['username']
-            
+                # Збираємо код 
                 verification_code = ''
                 for i in range(6):
                     num = form_code.cleaned_data[f'code_{i+1}']
                     verification_code += num
 
-                print(verification_code)
+                # print(verification_code)
 
-                request.user.username
+                # request.user.username
                 
+                # Отримуємо логін користувача із сесії
                 username = self.request.session['username']
-                
+                # Знаходимо код у базі, фільтруємо, щоб код стосувався користувача та отримуємо перше значення
                 model_code = VerificationCode.objects.filter(username = username).first()
                 
-                
+                # Якщо коди співпадають
                 if verification_code == model_code.code:
-                    
+                    # Отримуємо щойно створеного користувача
                     user_profile = User.objects.get(username = username)
+                    # 'Активуємо' його профіль
                     user_profile.is_active = True
                     user_profile.save()
                     
+                    # Створюємо профіль користувача
                     profile = Profile.objects.create(
-                        user = user_profile, 
-
+                        user = user_profile
                     )
 
+                    # Переходимо на сторінку логіну
                     return redirect('login')
                 
         elif button == 'continue':     
@@ -115,30 +120,32 @@ class RegistrationView(View):
                     show_detail_form = True
                 else:   
                     form.add_error('email', 'Користувач з таким ім’ям вже існує')
-                
                     return render(request=request ,template_name= self.template_name, context={'show_detail_form': show_detail_form, 'form_details': UserDetailsForm})
-
-
         return render(request=request ,template_name= self.template_name, context={'form_code': CodeVerificationForm})
     
+# Клас представлення для логіну користувача, базується на вбудованому LoginView
 class LoginUserView(LoginView):
-    template_name = 'login/login.html'
-    authentication_form = LoginForm
-    redirect_authenticated_user = True
-    # next_page = reverse_lazy('core')
+    template_name = 'login/login.html' # Вказуємо шлях до шаблону з формою авторизації
+    authentication_form = LoginForm # Використовуємо кастомну форму для авторизації
+    redirect_authenticated_user = True # Якщо користувач вже авторизований — перекидаємо сторінку
     
+    # Метод, що виконується після успішної валідації форми
     def form_valid(self, form):
         response = super().form_valid(form)
 
         user = self.request.user
+        # Якщо користувач ще не має імені чи прізвища
         if not user.first_name or not user.last_name:
+            #  Вказуємо в сесії, що треба показати форму деталей
             self.request.session['show_detail_form'] = True
         else:
+            # В інших випадках форма недоступна
             self.request.session['show_detail_form'] = False
 
         return response
         
     def get_success_url(self):
+        # Перенаправляємо користувача на головну сторінку після успішної авторизації
         return reverse_lazy('core')
     
 class UserLogoutView(LogoutView):
